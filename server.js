@@ -95,6 +95,63 @@ app.get('/api/stats', (req, res) => {
   });
 });
 
+// Activity feed - recent trades with context
+app.get('/api/activity', (req, res) => {
+  const limit = Math.min(parseInt(req.query.limit) || 50, 100);
+  const since = req.query.since; // ISO timestamp for polling
+  
+  let query = `
+    SELECT 
+      t.id, t.outcome, t.amount, t.shares, t.price, t.comment, t.created_at,
+      a.id as agent_id, a.handle, a.avatar,
+      m.id as market_id, m.question, m.yes_shares, m.no_shares
+    FROM trades t
+    JOIN agents a ON t.agent_id = a.id
+    JOIN markets m ON t.market_id = m.id
+  `;
+  
+  const params = [];
+  if (since) {
+    query += ' WHERE t.created_at > ?';
+    params.push(since);
+  }
+  
+  query += ' ORDER BY t.created_at DESC LIMIT ?';
+  params.push(limit);
+  
+  const activities = db.all(query, params);
+  
+  // Format for display
+  const feed = activities.map(a => {
+    const prob = (a.no_shares / (a.yes_shares + a.no_shares) * 100).toFixed(0);
+    const action = a.amount > 0 ? 'bought' : 'sold';
+    const outcome = a.outcome.toUpperCase();
+    
+    return {
+      id: a.id,
+      type: 'trade',
+      timestamp: a.created_at,
+      agent: { id: a.agent_id, handle: a.handle, avatar: a.avatar },
+      market: { id: a.market_id, question: a.question, probability: parseInt(prob) },
+      trade: {
+        action,
+        outcome,
+        amount: Math.abs(a.amount),
+        shares: Math.abs(a.shares).toFixed(2)
+      },
+      comment: a.comment,
+      // Human-readable summary
+      summary: `${a.avatar} @${a.handle} ${action} ${Math.abs(a.amount)} AGP of ${outcome} → ${prob}%`
+    };
+  });
+  
+  res.json({ 
+    activities: feed,
+    count: feed.length,
+    latest: feed[0]?.timestamp || null
+  });
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found', path: req.path });

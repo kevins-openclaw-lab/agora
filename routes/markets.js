@@ -138,10 +138,10 @@ router.get('/:id', (req, res) => {
 /**
  * POST /markets/:id/trade
  * Execute a trade
- * Body: { agent_id, outcome: 'yes'|'no', amount }
+ * Body: { agent_id, outcome: 'yes'|'no', amount, comment? }
  */
 router.post('/:id/trade', (req, res) => {
-  const { agent_id, outcome, amount } = req.body;
+  const { agent_id, outcome, amount, comment } = req.body;
   
   if (!agent_id || !outcome || !amount) {
     return res.status(400).json({ error: 'agent_id, outcome, and amount required' });
@@ -220,9 +220,9 @@ router.post('/:id/trade', (req, res) => {
   // 4. Record trade
   const tradeId = uuidv4();
   db.run(`
-    INSERT INTO trades (id, agent_id, market_id, outcome, amount, shares, price, fee)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `, [tradeId, agent_id, market.id, outcome, amount, shares, avgPrice, fee]);
+    INSERT INTO trades (id, agent_id, market_id, outcome, amount, shares, price, fee, comment)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `, [tradeId, agent_id, market.id, outcome, amount, shares, avgPrice, fee, comment || null]);
   
   // Get updated state
   const updatedMarket = db.get('SELECT * FROM markets WHERE id = ?', [market.id]);

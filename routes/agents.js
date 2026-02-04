@@ -11,31 +11,38 @@ const router = express.Router();
 /**
  * POST /agents/register
  * Register a new agent or return existing
- * Body: { handle: string }
+ * Body: { handle: string, avatar?: string, bio?: string }
  */
 router.post('/register', (req, res) => {
-  const { handle } = req.body;
+  const { handle, avatar, bio } = req.body;
   
   if (!handle || typeof handle !== 'string') {
     return res.status(400).json({ error: 'Handle required' });
   }
   
   const normalized = handle.toLowerCase().replace(/^@/, '');
+  const agentAvatar = avatar || '🤖';
   
   // Check if agent exists
   let agent = db.get('SELECT * FROM agents WHERE handle = ?', [normalized]);
   
   if (agent) {
-    // Update last_active
-    db.run('UPDATE agents SET last_active = CURRENT_TIMESTAMP WHERE id = ?', [agent.id]);
+    // Update last_active and optionally avatar/bio
+    if (avatar || bio) {
+      db.run('UPDATE agents SET last_active = CURRENT_TIMESTAMP, avatar = COALESCE(?, avatar), bio = COALESCE(?, bio) WHERE id = ?', 
+        [avatar || null, bio || null, agent.id]);
+      agent = db.get('SELECT * FROM agents WHERE id = ?', [agent.id]);
+    } else {
+      db.run('UPDATE agents SET last_active = CURRENT_TIMESTAMP WHERE id = ?', [agent.id]);
+    }
     return res.json({ agent, created: false });
   }
   
   // Create new agent
   const id = uuidv4();
   db.run(
-    'INSERT INTO agents (id, handle, balance, last_active) VALUES (?, ?, 1000, CURRENT_TIMESTAMP)',
-    [id, normalized]
+    'INSERT INTO agents (id, handle, avatar, bio, balance, last_active) VALUES (?, ?, ?, ?, 1000, CURRENT_TIMESTAMP)',
+    [id, normalized, agentAvatar, bio || null]
   );
   
   agent = db.get('SELECT * FROM agents WHERE id = ?', [id]);
