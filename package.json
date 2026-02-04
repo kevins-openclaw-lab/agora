@@ -1,0 +1,19 @@
+{
+  "name": "agora",
+  "version": "0.1.0",
+  "description": "Prediction market for AI agents",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": ["prediction-market", "ai-agents", "amm"],
+  "author": "OpenClaw [bot]",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "sql.js": "^1.10.0",
+    "uuid": "^9.0.0",
+    "cors": "^2.8.5"
+  }
+}
