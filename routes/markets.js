@@ -1,5 +1,5 @@
 /**
- * Markets API routes
+ * Market routes - create, list, trade, resolve
  */
 
 const express = require('express');
@@ -9,418 +9,424 @@ const amm = require('../lib/amm');
 
 const router = express.Router();
 
-// Require auth middleware
-function requireAuth(req, res, next) {
-  if (!req.agent) {
-    return res.status(401).json({
-      error: { code: 'UNAUTHORIZED', message: 'Agent authentication required' }
-    });
-  }
-  next();
-}
-
-// Ensure agent exists in database
-function ensureAgent(req, res, next) {
-  if (!req.agent) return next();
-  
-  const existing = db.get('SELECT * FROM agents WHERE id = ?', [req.agent.id]);
-  if (!existing) {
-    db.run(
-      'INSERT INTO agents (id, handle, balance) VALUES (?, ?, 1000)',
-      [req.agent.id, req.agent.handle]
-    );
-    console.log(`🆕 New agent registered: ${req.agent.handle}`);
-  } else {
-    db.run('UPDATE agents SET last_active = CURRENT_TIMESTAMP WHERE id = ?', [req.agent.id]);
-  }
-  next();
-}
-
-router.use(ensureAgent);
-
 /**
- * GET /api/markets - List all markets
+ * POST /markets
+ * Create a new prediction market
+ * Body: { question, description?, category?, creator_id, liquidity? }
  */
-router.get('/', (req, res) => {
-  const { status = 'open', category, limit = 50, offset = 0 } = req.query;
+router.post('/', (req, res) => {
+  const { question, description, category, creator_id, liquidity = 100 } = req.body;
   
-  let sql = 'SELECT * FROM markets WHERE 1=1';
-  const params = [];
-  
-  if (status !== 'all') {
-    sql += ' AND status = ?';
-    params.push(status);
+  if (!question || typeof question !== 'string') {
+    return res.status(400).json({ error: 'Question required' });
   }
   
-  if (category) {
-    sql += ' AND category = ?';
-    params.push(category);
+  if (!creator_id) {
+    return res.status(400).json({ error: 'Creator ID required' });
   }
   
-  sql += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
-  params.push(parseInt(limit), parseInt(offset));
+  // Verify creator exists and has enough balance
+  const creator = db.get('SELECT * FROM agents WHERE id = ?', [creator_id]);
+  if (!creator) {
+    return res.status(404).json({ error: 'Creator not found' });
+  }
   
-  const markets = db.all(sql, params);
+  if (creator.balance < liquidity) {
+    return res.status(400).json({ error: 'Insufficient balance for liquidity' });
+  }
   
-  // Add computed prices
-  const enriched = markets.map(m => ({
-    ...m,
-    yesPrice: amm.getYesPrice(m.yes_shares, m.no_shares),
-    noPrice: amm.getNoPrice(m.yes_shares, m.no_shares)
-  }));
+  // Initialize AMM
+  const { yesShares, noShares, k } = amm.initializeMarket(liquidity);
   
-  const total = db.get('SELECT COUNT(*) as count FROM markets')?.count || 0;
+  // Deduct liquidity from creator
+  db.run('UPDATE agents SET balance = balance - ? WHERE id = ?', [liquidity, creator_id]);
   
-  res.json({
-    markets: enriched,
-    total,
-    hasMore: offset + markets.length < total
+  // Create market
+  const id = uuidv4();
+  db.run(`
+    INSERT INTO markets (id, question, description, category, creator_id, yes_shares, no_shares, k)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `, [id, question, description || null, category || 'general', creator_id, yesShares, noShares, k]);
+  
+  const market = db.get('SELECT * FROM markets WHERE id = ?', [id]);
+  
+  res.status(201).json({
+    market: {
+      ...market,
+      probability: amm.getPrice(market.yes_shares, market.no_shares)
+    }
   });
 });
 
 /**
- * GET /api/markets/:id - Get single market
+ * GET /markets
+ * List markets with filters
+ */
+router.get('/', (req, res) => {
+  const { status = 'open', category, sort = 'volume', limit = 50 } = req.query;
+  
+  let query = 'SELECT * FROM markets WHERE 1=1';
+  const params = [];
+  
+  if (status && status !== 'all') {
+    query += ' AND status = ?';
+    params.push(status);
+  }
+  
+  if (category) {
+    query += ' AND category = ?';
+    params.push(category);
+  }
+  
+  // Sort
+  if (sort === 'newest') {
+    query += ' ORDER BY created_at DESC';
+  } else if (sort === 'volume') {
+    query += ' ORDER BY volume DESC';
+  } else if (sort === 'probability') {
+    query += ' ORDER BY (no_shares / (yes_shares + no_shares)) DESC';
+  }
+  
+  query += ' LIMIT ?';
+  params.push(Math.min(parseInt(limit), 100));
+  
+  const markets = db.all(query, params);
+  
+  // Add probabilities
+  const enriched = markets.map(m => ({
+    ...m,
+    probability: amm.getPrice(m.yes_shares, m.no_shares)
+  }));
+  
+  res.json({ markets: enriched });
+});
+
+/**
+ * GET /markets/:id
+ * Get market details
  */
 router.get('/:id', (req, res) => {
   const market = db.get('SELECT * FROM markets WHERE id = ?', [req.params.id]);
   
   if (!market) {
-    return res.status(404).json({
-      error: { code: 'NOT_FOUND', message: 'Market not found' }
-    });
+    return res.status(404).json({ error: 'Market not found' });
   }
   
   // Get creator info
   const creator = db.get('SELECT id, handle FROM agents WHERE id = ?', [market.creator_id]);
   
-  // Get trade count
-  const trades = db.get(
-    'SELECT COUNT(*) as count FROM trades WHERE market_id = ?', 
-    [req.params.id]
-  );
+  // Get recent trades
+  const trades = db.all(`
+    SELECT t.*, a.handle
+    FROM trades t
+    JOIN agents a ON t.agent_id = a.id
+    WHERE t.market_id = ?
+    ORDER BY t.created_at DESC
+    LIMIT 10
+  `, [market.id]);
   
   res.json({
-    ...market,
-    yesPrice: amm.getYesPrice(market.yes_shares, market.no_shares),
-    noPrice: amm.getNoPrice(market.yes_shares, market.no_shares),
-    creator,
-    tradeCount: trades?.count || 0
-  });
-});
-
-/**
- * POST /api/markets - Create a new market
- */
-router.post('/', requireAuth, (req, res) => {
-  const { question, description, category, resolutionDate, initialLiquidity, resolutionSource } = req.body;
-  
-  // Validation
-  if (!question || question.length < 10) {
-    return res.status(400).json({
-      error: { code: 'INVALID_QUESTION', message: 'Question must be at least 10 characters' }
-    });
-  }
-  
-  if (!resolutionDate) {
-    return res.status(400).json({
-      error: { code: 'MISSING_RESOLUTION_DATE', message: 'Resolution date required' }
-    });
-  }
-  
-  const liquidity = parseInt(initialLiquidity) || 100;
-  if (liquidity < 100) {
-    return res.status(400).json({
-      error: { code: 'INSUFFICIENT_LIQUIDITY', message: 'Minimum initial liquidity is 100 AGP' }
-    });
-  }
-  
-  // Check agent balance
-  const agent = db.get('SELECT * FROM agents WHERE id = ?', [req.agent.id]);
-  if (agent.balance < liquidity) {
-    return res.status(400).json({
-      error: { 
-        code: 'INSUFFICIENT_BALANCE', 
-        message: 'Not enough AGP',
-        details: { required: liquidity, available: agent.balance }
-      }
-    });
-  }
-  
-  // Create pool
-  const pool = amm.createPool(liquidity);
-  const id = uuidv4();
-  
-  // Deduct liquidity from creator
-  db.run('UPDATE agents SET balance = balance - ? WHERE id = ?', [liquidity, req.agent.id]);
-  
-  // Create market
-  db.run(`
-    INSERT INTO markets (id, question, description, category, creator_id, yes_shares, no_shares, k, resolution_date, resolution_source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `, [
-    id,
-    question,
-    description || '',
-    category || 'general',
-    req.agent.id,
-    pool.yesShares,
-    pool.noShares,
-    pool.k,
-    resolutionDate,
-    resolutionSource || ''
-  ]);
-  
-  const market = db.get('SELECT * FROM markets WHERE id = ?', [id]);
-  
-  console.log(`📊 New market created: "${question.substring(0, 50)}..." by ${req.agent.handle}`);
-  
-  res.status(201).json({
     market: {
       ...market,
-      yesPrice: amm.getYesPrice(market.yes_shares, market.no_shares),
-      noPrice: amm.getNoPrice(market.yes_shares, market.no_shares)
+      probability: amm.getPrice(market.yes_shares, market.no_shares),
+      creator
     },
-    newBalance: agent.balance - liquidity
+    recent_trades: trades
   });
 });
 
 /**
- * POST /api/markets/:id/trade - Place a trade
+ * POST /markets/:id/trade
+ * Execute a trade
+ * Body: { agent_id, outcome: 'yes'|'no', amount }
  */
-router.post('/:id/trade', requireAuth, (req, res) => {
-  const { outcome, amount } = req.body;
+router.post('/:id/trade', (req, res) => {
+  const { agent_id, outcome, amount } = req.body;
   
-  // Validation
-  if (!['yes', 'no'].includes(outcome)) {
-    return res.status(400).json({
-      error: { code: 'INVALID_OUTCOME', message: 'Outcome must be "yes" or "no"' }
-    });
+  if (!agent_id || !outcome || !amount) {
+    return res.status(400).json({ error: 'agent_id, outcome, and amount required' });
   }
   
-  const tradeAmount = parseInt(amount);
-  if (!tradeAmount || tradeAmount < 1) {
-    return res.status(400).json({
-      error: { code: 'INVALID_AMOUNT', message: 'Amount must be a positive integer' }
-    });
+  if (!['yes', 'no'].includes(outcome)) {
+    return res.status(400).json({ error: 'Outcome must be yes or no' });
+  }
+  
+  if (amount < 1) {
+    return res.status(400).json({ error: 'Minimum trade is 1 AGP' });
   }
   
   // Get market
   const market = db.get('SELECT * FROM markets WHERE id = ?', [req.params.id]);
   if (!market) {
-    return res.status(404).json({
-      error: { code: 'NOT_FOUND', message: 'Market not found' }
-    });
+    return res.status(404).json({ error: 'Market not found' });
   }
   
   if (market.status !== 'open') {
-    return res.status(400).json({
-      error: { code: 'MARKET_CLOSED', message: 'Market is not open for trading' }
-    });
+    return res.status(400).json({ error: 'Market is not open for trading' });
   }
   
-  // Check balance
-  const agent = db.get('SELECT * FROM agents WHERE id = ?', [req.agent.id]);
-  if (agent.balance < tradeAmount) {
-    return res.status(400).json({
-      error: { 
-        code: 'INSUFFICIENT_BALANCE', 
-        message: 'Not enough AGP',
-        details: { required: tradeAmount, available: agent.balance }
-      }
-    });
+  // Get agent
+  const agent = db.get('SELECT * FROM agents WHERE id = ?', [agent_id]);
+  if (!agent) {
+    return res.status(404).json({ error: 'Agent not found' });
+  }
+  
+  if (agent.balance < amount) {
+    return res.status(400).json({ error: 'Insufficient balance' });
   }
   
   // Calculate trade
-  let trade;
-  try {
-    trade = amm.calculateTrade(market, outcome, tradeAmount);
-  } catch (err) {
-    return res.status(400).json({
-      error: { code: 'TRADE_ERROR', message: err.message }
-    });
+  const { shares, fee, avgPrice, newYes, newNo } = amm.calculateBuy(
+    market.yes_shares,
+    market.no_shares,
+    amount,
+    outcome
+  );
+  
+  if (shares <= 0) {
+    return res.status(400).json({ error: 'Trade too small' });
   }
   
-  // Update agent balance
-  db.run('UPDATE agents SET balance = balance - ? WHERE id = ?', [tradeAmount, req.agent.id]);
+  // Execute trade
+  // 1. Deduct from agent balance
+  db.run('UPDATE agents SET balance = balance - ?, last_active = CURRENT_TIMESTAMP WHERE id = ?', 
+    [amount, agent_id]);
   
-  // Update market pool
-  db.run(`
-    UPDATE markets 
-    SET yes_shares = ?, no_shares = ?, volume = volume + ?
-    WHERE id = ?
-  `, [trade.newYesShares, trade.newNoShares, tradeAmount, req.params.id]);
+  // 2. Update market AMM
+  db.run('UPDATE markets SET yes_shares = ?, no_shares = ?, volume = volume + ? WHERE id = ?',
+    [newYes, newNo, amount, market.id]);
   
-  // Update or create position
+  // 3. Update or create position
   const position = db.get(
     'SELECT * FROM positions WHERE agent_id = ? AND market_id = ?',
-    [req.agent.id, req.params.id]
+    [agent_id, market.id]
   );
   
   if (position) {
-    if (outcome === 'yes') {
-      db.run(
-        'UPDATE positions SET yes_shares = yes_shares + ?, total_cost = total_cost + ? WHERE id = ?',
-        [trade.shares, tradeAmount, position.id]
-      );
-    } else {
-      db.run(
-        'UPDATE positions SET no_shares = no_shares + ?, total_cost = total_cost + ? WHERE id = ?',
-        [trade.shares, tradeAmount, position.id]
-      );
-    }
+    const yesAdd = outcome === 'yes' ? shares : 0;
+    const noAdd = outcome === 'no' ? shares : 0;
+    db.run(`
+      UPDATE positions 
+      SET yes_shares = yes_shares + ?, no_shares = no_shares + ?, total_cost = total_cost + ?
+      WHERE id = ?
+    `, [yesAdd, noAdd, amount, position.id]);
   } else {
-    const posId = uuidv4();
     db.run(`
       INSERT INTO positions (id, agent_id, market_id, yes_shares, no_shares, total_cost)
       VALUES (?, ?, ?, ?, ?, ?)
-    `, [
-      posId,
-      req.agent.id,
-      req.params.id,
-      outcome === 'yes' ? trade.shares : 0,
-      outcome === 'no' ? trade.shares : 0,
-      tradeAmount
-    ]);
+    `, [uuidv4(), agent_id, market.id, outcome === 'yes' ? shares : 0, outcome === 'no' ? shares : 0, amount]);
   }
   
-  // Record trade
+  // 4. Record trade
   const tradeId = uuidv4();
   db.run(`
     INSERT INTO trades (id, agent_id, market_id, outcome, amount, shares, price, fee)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `, [tradeId, req.agent.id, req.params.id, outcome, tradeAmount, trade.shares, trade.avgPrice, trade.fee]);
+  `, [tradeId, agent_id, market.id, outcome, amount, shares, avgPrice, fee]);
   
-  console.log(`💰 Trade: ${req.agent.handle} bought ${trade.shares.toFixed(1)} ${outcome.toUpperCase()} @ ${trade.avgPrice.toFixed(2)}`);
+  // Get updated state
+  const updatedMarket = db.get('SELECT * FROM markets WHERE id = ?', [market.id]);
+  const updatedPosition = db.get(
+    'SELECT * FROM positions WHERE agent_id = ? AND market_id = ?',
+    [agent_id, market.id]
+  );
+  const updatedAgent = db.get('SELECT balance FROM agents WHERE id = ?', [agent_id]);
   
   res.json({
     trade: {
       id: tradeId,
       outcome,
-      amount: tradeAmount,
-      shares: trade.shares,
-      avgPrice: trade.avgPrice,
-      fee: trade.fee
+      amount,
+      shares,
+      avg_price: avgPrice,
+      fee
     },
     market: {
-      yesPrice: trade.newYesPrice,
-      noPrice: trade.newNoPrice
+      ...updatedMarket,
+      probability: amm.getPrice(updatedMarket.yes_shares, updatedMarket.no_shares)
     },
-    newBalance: agent.balance - tradeAmount
+    position: updatedPosition,
+    balance: updatedAgent.balance
   });
 });
 
 /**
- * GET /api/markets/:id/position - Get agent's position
+ * POST /markets/:id/sell
+ * Sell shares back to the market
+ * Body: { agent_id, outcome: 'yes'|'no', shares }
  */
-router.get('/:id/position', requireAuth, (req, res) => {
-  const position = db.get(
-    'SELECT * FROM positions WHERE agent_id = ? AND market_id = ?',
-    [req.agent.id, req.params.id]
-  );
+router.post('/:id/sell', (req, res) => {
+  const { agent_id, outcome, shares } = req.body;
   
-  if (!position) {
-    return res.json({
-      yesShares: 0,
-      noShares: 0,
-      totalCost: 0,
-      currentValue: 0,
-      pnl: 0
-    });
-  }
-  
-  const market = db.get('SELECT * FROM markets WHERE id = ?', [req.params.id]);
-  const yesPrice = amm.getYesPrice(market.yes_shares, market.no_shares);
-  const noPrice = amm.getNoPrice(market.yes_shares, market.no_shares);
-  
-  const currentValue = Math.floor(
-    position.yes_shares * yesPrice + position.no_shares * noPrice
-  );
-  
-  res.json({
-    yesShares: position.yes_shares,
-    noShares: position.no_shares,
-    totalCost: position.total_cost,
-    currentValue,
-    pnl: currentValue - position.total_cost
-  });
-});
-
-/**
- * POST /api/markets/:id/resolve - Resolve a market
- */
-router.post('/:id/resolve', requireAuth, (req, res) => {
-  const { outcome, evidence } = req.body;
-  
-  const market = db.get('SELECT * FROM markets WHERE id = ?', [req.params.id]);
-  
-  if (!market) {
-    return res.status(404).json({
-      error: { code: 'NOT_FOUND', message: 'Market not found' }
-    });
-  }
-  
-  // Only creator can resolve (for MVP)
-  if (market.creator_id !== req.agent.id) {
-    return res.status(403).json({
-      error: { code: 'FORBIDDEN', message: 'Only the market creator can resolve' }
-    });
-  }
-  
-  if (market.status !== 'open') {
-    return res.status(400).json({
-      error: { code: 'ALREADY_RESOLVED', message: 'Market already resolved' }
-    });
+  if (!agent_id || !outcome || !shares) {
+    return res.status(400).json({ error: 'agent_id, outcome, and shares required' });
   }
   
   if (!['yes', 'no'].includes(outcome)) {
-    return res.status(400).json({
-      error: { code: 'INVALID_OUTCOME', message: 'Resolution must be "yes" or "no"' }
-    });
+    return res.status(400).json({ error: 'Outcome must be yes or no' });
   }
   
-  // Resolve market
+  // Get market
+  const market = db.get('SELECT * FROM markets WHERE id = ?', [req.params.id]);
+  if (!market) {
+    return res.status(404).json({ error: 'Market not found' });
+  }
+  
+  if (market.status !== 'open') {
+    return res.status(400).json({ error: 'Market is not open for trading' });
+  }
+  
+  // Get position
+  const position = db.get(
+    'SELECT * FROM positions WHERE agent_id = ? AND market_id = ?',
+    [agent_id, market.id]
+  );
+  
+  if (!position) {
+    return res.status(400).json({ error: 'No position in this market' });
+  }
+  
+  const heldShares = outcome === 'yes' ? position.yes_shares : position.no_shares;
+  if (heldShares < shares) {
+    return res.status(400).json({ error: `Insufficient shares (have ${heldShares})` });
+  }
+  
+  // Calculate sale
+  const { amount, fee, avgPrice, newYes, newNo } = amm.calculateSell(
+    market.yes_shares,
+    market.no_shares,
+    shares,
+    outcome
+  );
+  
+  // Execute sale
+  // 1. Add to agent balance
+  db.run('UPDATE agents SET balance = balance + ?, last_active = CURRENT_TIMESTAMP WHERE id = ?',
+    [amount, agent_id]);
+  
+  // 2. Update market AMM
+  db.run('UPDATE markets SET yes_shares = ?, no_shares = ?, volume = volume + ? WHERE id = ?',
+    [newYes, newNo, amount, market.id]);
+  
+  // 3. Update position
+  if (outcome === 'yes') {
+    db.run('UPDATE positions SET yes_shares = yes_shares - ? WHERE id = ?', [shares, position.id]);
+  } else {
+    db.run('UPDATE positions SET no_shares = no_shares - ? WHERE id = ?', [shares, position.id]);
+  }
+  
+  // 4. Record trade (negative amount indicates sale)
+  const tradeId = uuidv4();
+  db.run(`
+    INSERT INTO trades (id, agent_id, market_id, outcome, amount, shares, price, fee)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `, [tradeId, agent_id, market.id, outcome, -amount, -shares, avgPrice, fee]);
+  
+  // Get updated state
+  const updatedMarket = db.get('SELECT * FROM markets WHERE id = ?', [market.id]);
+  const updatedPosition = db.get(
+    'SELECT * FROM positions WHERE agent_id = ? AND market_id = ?',
+    [agent_id, market.id]
+  );
+  const updatedAgent = db.get('SELECT balance FROM agents WHERE id = ?', [agent_id]);
+  
+  res.json({
+    trade: {
+      id: tradeId,
+      outcome,
+      amount,
+      shares: -shares,
+      avg_price: avgPrice,
+      fee
+    },
+    market: {
+      ...updatedMarket,
+      probability: amm.getPrice(updatedMarket.yes_shares, updatedMarket.no_shares)
+    },
+    position: updatedPosition,
+    balance: updatedAgent.balance
+  });
+});
+
+/**
+ * POST /markets/:id/resolve
+ * Resolve a market (creator or admin only)
+ * Body: { resolver_id, resolution: 'yes'|'no', source?, evidence? }
+ */
+router.post('/:id/resolve', (req, res) => {
+  const { resolver_id, resolution, source, evidence } = req.body;
+  
+  if (!resolver_id || !resolution) {
+    return res.status(400).json({ error: 'resolver_id and resolution required' });
+  }
+  
+  if (!['yes', 'no'].includes(resolution)) {
+    return res.status(400).json({ error: 'Resolution must be yes or no' });
+  }
+  
+  // Get market
+  const market = db.get('SELECT * FROM markets WHERE id = ?', [req.params.id]);
+  if (!market) {
+    return res.status(404).json({ error: 'Market not found' });
+  }
+  
+  if (market.status !== 'open') {
+    return res.status(400).json({ error: 'Market already resolved' });
+  }
+  
+  // Only creator can resolve (for MVP)
+  if (market.creator_id !== resolver_id) {
+    return res.status(403).json({ error: 'Only market creator can resolve' });
+  }
+  
+  // Update market status
   db.run(`
     UPDATE markets 
-    SET status = 'resolved', resolution = ?, resolution_evidence = ?, resolved_at = CURRENT_TIMESTAMP
+    SET status = 'resolved', resolution = ?, resolution_date = CURRENT_TIMESTAMP,
+        resolution_source = ?, resolution_evidence = ?, resolved_at = CURRENT_TIMESTAMP
     WHERE id = ?
-  `, [outcome, evidence || '', req.params.id]);
+  `, [resolution, source || null, evidence || null, market.id]);
   
-  // Pay out winners
-  const positions = db.all('SELECT * FROM positions WHERE market_id = ?', [req.params.id]);
+  // Process payouts and Brier scores
+  const positions = db.all('SELECT * FROM positions WHERE market_id = ?', [market.id]);
   
-  let totalPayout = 0;
+  const payouts = [];
   for (const pos of positions) {
-    const winningShares = outcome === 'yes' ? pos.yes_shares : pos.no_shares;
-    const payout = Math.floor(winningShares);
+    const payout = amm.calculatePayout(pos, resolution);
     
     if (payout > 0) {
       db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [payout, pos.agent_id]);
-      totalPayout += payout;
-      
-      // Update Brier score
-      const prediction = outcome === 'yes' 
-        ? pos.yes_shares / (pos.yes_shares + pos.no_shares + 0.001)
-        : pos.no_shares / (pos.yes_shares + pos.no_shares + 0.001);
-      const brier = Math.pow(prediction - 1, 2); // Distance from correct answer
-      db.run(
-        'UPDATE agents SET brier_sum = brier_sum + ?, brier_count = brier_count + 1 WHERE id = ?',
-        [brier, pos.agent_id]
-      );
     }
+    
+    // Calculate and record Brier score
+    // Use their average purchase price as their "forecast"
+    const totalShares = pos.yes_shares + pos.no_shares;
+    if (totalShares > 0 && pos.total_cost > 0) {
+      const impliedProb = pos.yes_shares / totalShares;
+      const brier = amm.calculateBrier(impliedProb, resolution);
+      
+      db.run(`
+        UPDATE agents 
+        SET brier_sum = brier_sum + ?, brier_count = brier_count + 1
+        WHERE id = ?
+      `, [brier, pos.agent_id]);
+    }
+    
+    payouts.push({
+      agent_id: pos.agent_id,
+      payout,
+      yes_shares: pos.yes_shares,
+      no_shares: pos.no_shares
+    });
   }
   
-  console.log(`✅ Market resolved: "${market.question.substring(0, 30)}..." → ${outcome.toUpperCase()}, ${totalPayout} AGP paid out`);
+  const updatedMarket = db.get('SELECT * FROM markets WHERE id = ?', [market.id]);
   
   res.json({
-    market: {
-      ...market,
-      status: 'resolved',
-      resolution: outcome
-    },
-    totalPayout,
-    winnersCount: positions.filter(p => 
-      (outcome === 'yes' ? p.yes_shares : p.no_shares) > 0
-    ).length
+    market: updatedMarket,
+    resolution,
+    payouts,
+    total_paid: payouts.reduce((sum, p) => sum + p.payout, 0)
   });
 });
 
