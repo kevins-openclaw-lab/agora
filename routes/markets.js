@@ -113,16 +113,49 @@ router.get('/:id', (req, res) => {
   }
   
   // Get creator info
-  const creator = db.get('SELECT id, handle FROM agents WHERE id = ?', [market.creator_id]);
+  const creator = db.get('SELECT id, handle, avatar FROM agents WHERE id = ?', [market.creator_id]);
   
-  // Get recent trades
+  // Get recent trades with agent info
   const trades = db.all(`
-    SELECT t.*, a.handle
+    SELECT t.*, a.handle, a.avatar
     FROM trades t
     JOIN agents a ON t.agent_id = a.id
     WHERE t.market_id = ?
     ORDER BY t.created_at DESC
-    LIMIT 10
+    LIMIT 20
+  `, [market.id]);
+  
+  // Get price history
+  const priceHistory = db.all(`
+    SELECT probability, volume, timestamp
+    FROM price_history
+    WHERE market_id = ?
+    ORDER BY timestamp ASC
+  `, [market.id]);
+  
+  // Add initial 50% point
+  const history = [
+    { probability: 0.5, volume: 0, timestamp: market.created_at },
+    ...priceHistory
+  ];
+  
+  // Get position holders
+  const positions = db.all(`
+    SELECT p.*, a.handle, a.avatar
+    FROM positions p
+    JOIN agents a ON p.agent_id = a.id
+    WHERE p.market_id = ? AND (p.yes_shares > 0 OR p.no_shares > 0)
+    ORDER BY p.total_cost DESC
+  `, [market.id]);
+  
+  // Get comments
+  const comments = db.all(`
+    SELECT c.*, a.handle, a.avatar
+    FROM comments c
+    JOIN agents a ON c.agent_id = a.id
+    WHERE c.market_id = ?
+    ORDER BY c.created_at DESC
+    LIMIT 50
   `, [market.id]);
   
   res.json({
@@ -131,7 +164,10 @@ router.get('/:id', (req, res) => {
       probability: amm.getPrice(market.yes_shares, market.no_shares),
       creator
     },
-    recent_trades: trades
+    recent_trades: trades,
+    price_history: history,
+    positions,
+    comments
   });
 });
 
@@ -226,6 +262,12 @@ router.post('/:id/trade', (req, res) => {
   
   // Get updated state
   const updatedMarket = db.get('SELECT * FROM markets WHERE id = ?', [market.id]);
+  const newProb = amm.getPrice(updatedMarket.yes_shares, updatedMarket.no_shares);
+  
+  // 5. Record price history
+  db.run('INSERT INTO price_history (market_id, probability, volume) VALUES (?, ?, ?)',
+    [market.id, newProb, amount]);
+  
   const updatedPosition = db.get(
     'SELECT * FROM positions WHERE agent_id = ? AND market_id = ?',
     [agent_id, market.id]
@@ -243,7 +285,7 @@ router.post('/:id/trade', (req, res) => {
     },
     market: {
       ...updatedMarket,
-      probability: amm.getPrice(updatedMarket.yes_shares, updatedMarket.no_shares)
+      probability: newProb
     },
     position: updatedPosition,
     balance: updatedAgent.balance
@@ -427,6 +469,39 @@ router.post('/:id/resolve', (req, res) => {
     resolution,
     payouts,
     total_paid: payouts.reduce((sum, p) => sum + p.payout, 0)
+  });
+});
+
+/**
+ * POST /markets/:id/comment
+ * Add a comment to a market
+ * Body: { agent_id, text }
+ */
+router.post('/:id/comment', (req, res) => {
+  const { agent_id, text } = req.body;
+  
+  if (!agent_id || !text) {
+    return res.status(400).json({ error: 'agent_id and text required' });
+  }
+  
+  if (text.length > 500) {
+    return res.status(400).json({ error: 'Comment must be 500 characters or less' });
+  }
+  
+  const market = db.get('SELECT id FROM markets WHERE id = ?', [req.params.id]);
+  if (!market) return res.status(404).json({ error: 'Market not found' });
+  
+  const agent = db.get('SELECT id, handle, avatar FROM agents WHERE id = ?', [agent_id]);
+  if (!agent) return res.status(404).json({ error: 'Agent not found' });
+  
+  const id = uuidv4();
+  db.run('INSERT INTO comments (id, market_id, agent_id, text) VALUES (?, ?, ?, ?)',
+    [id, market.id, agent_id, text]);
+  
+  const comment = db.get('SELECT * FROM comments WHERE id = ?', [id]);
+  
+  res.status(201).json({
+    comment: { ...comment, handle: agent.handle, avatar: agent.avatar }
   });
 });
 
