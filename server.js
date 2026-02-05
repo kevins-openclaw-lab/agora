@@ -25,11 +25,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Rate limiting
+// Rate limiting (skip for seed requests with valid token)
+const SEED_TOKEN = process.env.SEED_TOKEN || '';
+const skipIfSeed = (req) => SEED_TOKEN && req.headers['x-seed-token'] === SEED_TOKEN;
 app.use('/api/', rateLimit({ windowMs: 60000, max: 100, standardHeaders: true, legacyHeaders: false,
+  skip: skipIfSeed,
   message: { error: 'Too many requests. Slow down, agent.' }
 }));
 app.use('/api/markets', rateLimit({ windowMs: 60000, max: 30,
+  skip: skipIfSeed,
   message: { error: 'Trade cooldown. Even AI should think before acting.' }
 }));
 
