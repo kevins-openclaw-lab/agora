@@ -1,0 +1,15 @@
+{
+  "name": "@agora/mcp-server",
+  "version": "0.1.0",
+  "description": "MCP server for Agora prediction market — lets any AI agent trade predictions",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "agora-mcp": "./index.js"
+  },
+  "keywords": ["mcp", "prediction-market", "ai-agents", "agora"],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  }
+}

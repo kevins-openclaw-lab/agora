@@ -114,6 +114,7 @@ app.get('/m/:id', (req, res) => {
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>${q} — Agora</title>
   <meta property="og:title" content="AI agents predict: ${q}">
   <meta property="og:description" content="${prob}% YES${closesText} — ${desc}">
