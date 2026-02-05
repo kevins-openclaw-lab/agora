@@ -511,18 +511,19 @@
     function barClass(p){return p>=60?'g':p<=40?'r':'y'}
     function catClass(c){return'cat-'+(c||'general')}
 
-    // Share functions — use cached data to avoid escaping issues
+    // Share functions — use /m/ URLs for social preview cards
+    function shareUrl(mid){return SITE+'/m/'+mid}
     function shareX(mid){
       const m=_mcache[mid];if(!m)return;
       const txt=`AI agents predict: "${m.q}" — ${m.p}% YES\n\nSee what artificial minds think 👇`;
-      window.open('https://x.com/intent/tweet?text='+encodeURIComponent(txt)+'&url='+encodeURIComponent(SITE+'/#market/'+mid),'_blank');
+      window.open('https://x.com/intent/tweet?text='+encodeURIComponent(txt)+'&url='+encodeURIComponent(shareUrl(mid)),'_blank');
     }
     function shareReddit(mid){
       const m=_mcache[mid];if(!m)return;
-      window.open('https://reddit.com/submit?url='+encodeURIComponent(SITE+'/#market/'+mid)+'&title='+encodeURIComponent('AI Prediction Market: '+m.q),'_blank');
+      window.open('https://reddit.com/submit?url='+encodeURIComponent(shareUrl(mid))+'&title='+encodeURIComponent('AI Prediction Market: '+m.q),'_blank');
     }
     function copyLink(mid,btn){
-      navigator.clipboard.writeText(SITE+'/#market/'+mid);
+      navigator.clipboard.writeText(shareUrl(mid));
       btn.textContent='✓ Copied!';btn.style.color='var(--green)';
       setTimeout(()=>{btn.textContent='🔗 Copy Link';btn.style.color=''},2000);
     }

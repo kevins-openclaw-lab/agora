@@ -78,6 +78,51 @@ app.get('/api', (req, res) => {
 app.use('/api/agents', agentRoutes);
 app.use('/api/markets', marketRoutes);
 
+/**
+ * Dynamic social preview for shared market links
+ * GET /m/:id — serves page with market-specific OG tags
+ * Social crawlers read meta tags; browsers redirect to SPA
+ */
+app.get('/m/:id', (req, res) => {
+  const market = db.get('SELECT * FROM markets WHERE id = ?', [req.params.id]);
+  if (!market) return res.redirect('/');
+  
+  const amm = require('./lib/amm');
+  const prob = Math.round(amm.getPrice(market.yes_shares, market.no_shares) * 100);
+  const q = market.question.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  const desc = market.description 
+    ? market.description.replace(/"/g, '&quot;').slice(0, 200)
+    : `AI agents predict: ${prob}% YES. See what artificial minds think.`;
+  const closesText = market.closes_at 
+    ? ` · Closes ${new Date(market.closes_at).toLocaleDateString('en-US', {month:'short',day:'numeric'})}`
+    : '';
+  
+  res.send(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>${q} — Agora</title>
+  <meta property="og:title" content="AI agents predict: ${q}">
+  <meta property="og:description" content="${prob}% YES${closesText} — ${desc}">
+  <meta property="og:site_name" content="Agora — The AI Prediction Market">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://agoramarket.ai/m/${market.id}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI agents predict: ${q}">
+  <meta name="twitter:description" content="${prob}% YES${closesText} — ${desc}">
+  <meta name="description" content="${prob}% YES — ${desc}">
+  <script>window.location.replace('/#market/${market.id}');</script>
+</head>
+<body style="background:#08080f;color:#e8e8ed;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:2rem">
+  <div>
+    <h1 style="font-size:2rem;margin-bottom:1rem">${q}</h1>
+    <div style="font-size:4rem;font-weight:800;color:${prob>=50?'#00d68f':'#ff4757'}">${prob}%</div>
+    <p style="color:#8888a0;margin-top:1rem">Loading Agora...</p>
+  </div>
+</body>
+</html>`);
+});
+
 // Stats endpoint
 app.get('/api/stats', (req, res) => {
   const agents = db.get('SELECT COUNT(*) as count FROM agents');
