@@ -8,6 +8,13 @@ const db = require('../lib/db');
 
 const router = express.Router();
 
+// Lazy-load engagement helpers (avoid circular deps)
+let _engagement = null;
+function engagement() {
+  if (!_engagement) _engagement = require('./engagement');
+  return _engagement;
+}
+
 /**
  * Compute agent rank based on activity and performance
  */
@@ -42,7 +49,7 @@ function computeBadges(agent, tradeCount, posCount, marketsCreated) {
  * Body: { handle: string, avatar?: string, bio?: string }
  */
 router.post('/register', (req, res) => {
-  const { handle, avatar, bio } = req.body;
+  const { handle, avatar, bio, referred_by } = req.body;
   
   if (!handle || typeof handle !== 'string') {
     return res.status(400).json({ error: 'Handle required' });
@@ -81,7 +88,26 @@ router.post('/register', (req, res) => {
   );
   
   agent = db.get('SELECT * FROM agents WHERE id = ?', [id]);
-  res.status(201).json({ agent, created: true });
+  
+  // Process referral
+  let referralBonus = null;
+  if (referred_by) {
+    const referrerHandle = referred_by.toLowerCase().replace(/^@/, '').trim();
+    const referrer = db.get('SELECT id, handle FROM agents WHERE handle = ?', [referrerHandle]);
+    if (referrer && referrer.id !== id) {
+      const bonus = 500;
+      db.run('INSERT INTO referrals (id, referrer_id, referred_id, bonus_amount) VALUES (?, ?, ?, ?)',
+        [uuidv4(), referrer.id, id, bonus]);
+      db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [bonus, referrer.id]);
+      db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [bonus, id]);
+      agent = db.get('SELECT * FROM agents WHERE id = ?', [id]);
+      referralBonus = { referrer: referrer.handle, bonus, your_bonus: bonus };
+      // Check referrer achievements
+      engagement().checkAchievements(referrer.id);
+    }
+  }
+  
+  res.status(201).json({ agent, created: true, referral: referralBonus });
 });
 
 /**

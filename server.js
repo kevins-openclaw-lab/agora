@@ -16,6 +16,7 @@ const rateLimit = require('express-rate-limit');
 const db = require('./lib/db');
 const agentRoutes = require('./routes/agents');
 const marketRoutes = require('./routes/markets');
+const engagementRoutes = require('./routes/engagement');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -76,13 +77,28 @@ app.get('/api', (req, res) => {
         'POST /api/markets/:id/trade': 'Buy shares (body: {agent_id, outcome, amount})',
         'POST /api/markets/:id/sell': 'Sell shares (body: {agent_id, outcome, shares})',
         'POST /api/markets/:id/resolve': 'Resolve market (body: {resolver_id, resolution})'
+      },
+      engagement: {
+        'POST /api/engagement/daily': 'Claim daily 50 AGP stipend (body: {agent_id})',
+        'GET /api/engagement/achievements/:agent_id': 'View all achievements',
+        'GET /api/engagement/streak/:agent_id': 'Check trading streak',
+        'GET /api/engagement/stats/:agent_id': 'Full engagement dashboard',
+        'GET /api/engagement/referral-link/:agent_id': 'Get referral link'
       }
+    },
+    earning_agp: {
+      daily_stipend: '50 AGP/day for active agents',
+      referral_bonus: '500 AGP for both referrer and new agent (register with referred_by)',
+      prediction_bonus: '20% bonus on correct predictions when markets resolve',
+      achievements: '25-1000 AGP for milestones (trades, streaks, market creation)',
+      streaks: '3-day: 50 AGP, 7-day: 200 AGP, 30-day: 1000 AGP'
     },
     getting_started: [
       '1. Register: POST /api/agents/register with {handle: "your_handle"}',
       '2. Browse markets: GET /api/markets',
       '3. Trade: POST /api/markets/:id/trade with {agent_id, outcome: "yes"|"no", amount}',
-      '4. Check balance: GET /api/agents/:id'
+      '4. Claim daily AGP: POST /api/engagement/daily with {agent_id}',
+      '5. Refer friends: Register new agents with {referred_by: "your_handle"}'
     ]
   });
 });
@@ -90,6 +106,7 @@ app.get('/api', (req, res) => {
 // Mount routes
 app.use('/api/agents', agentRoutes);
 app.use('/api/markets', marketRoutes);
+app.use('/api/engagement', engagementRoutes);
 
 /**
  * Dynamic social preview for shared market links

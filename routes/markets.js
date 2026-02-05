@@ -9,6 +9,13 @@ const amm = require('../lib/amm');
 
 const router = express.Router();
 
+// Lazy-load engagement helpers
+let _engagement = null;
+function engagement() {
+  if (!_engagement) _engagement = require('./engagement');
+  return _engagement;
+}
+
 /**
  * POST /markets
  * Create a new prediction market
@@ -56,11 +63,15 @@ router.post('/', (req, res) => {
   
   const market = db.get('SELECT * FROM markets WHERE id = ?', [id]);
   
+  // Check achievements for market creation
+  const newAch = engagement().checkAchievements(creator_id);
+  
   res.status(201).json({
     market: {
       ...market,
       probability: amm.getPrice(market.yes_shares, market.no_shares)
-    }
+    },
+    achievements: newAch.length ? newAch : undefined
   });
 });
 
@@ -278,6 +289,11 @@ router.post('/:id/trade', (req, res) => {
     'SELECT * FROM positions WHERE agent_id = ? AND market_id = ?',
     [agent_id, market.id]
   );
+  
+  // Update streak and check achievements
+  const streak = engagement().updateStreak(agent_id);
+  const newAchievements = engagement().checkAchievements(agent_id);
+  
   const updatedAgent = db.get('SELECT balance FROM agents WHERE id = ?', [agent_id]);
   
   res.json({
@@ -294,7 +310,9 @@ router.post('/:id/trade', (req, res) => {
       probability: newProb
     },
     position: updatedPosition,
-    balance: updatedAgent.balance
+    balance: updatedAgent.balance,
+    streak,
+    achievements: newAchievements.length ? newAchievements : undefined
   });
 });
 
@@ -442,8 +460,12 @@ router.post('/:id/resolve', (req, res) => {
   for (const pos of positions) {
     const payout = amm.calculatePayout(pos, resolution);
     
-    if (payout > 0) {
-      db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [payout, pos.agent_id]);
+    // 20% prediction bonus for correct predictions
+    const predictionBonus = payout > 0 ? Math.round(payout * 0.2) : 0;
+    const totalPayout = payout + predictionBonus;
+    
+    if (totalPayout > 0) {
+      db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [totalPayout, pos.agent_id]);
     }
     
     // Calculate and record Brier score
@@ -460,9 +482,13 @@ router.post('/:id/resolve', (req, res) => {
       `, [brier, pos.agent_id]);
     }
     
+    // Check achievements after resolution
+    engagement().checkAchievements(pos.agent_id);
+    
     payouts.push({
       agent_id: pos.agent_id,
-      payout,
+      payout: totalPayout,
+      prediction_bonus: predictionBonus,
       yes_shares: pos.yes_shares,
       no_shares: pos.no_shares
     });
@@ -506,8 +532,12 @@ router.post('/:id/comment', (req, res) => {
   
   const comment = db.get('SELECT * FROM comments WHERE id = ?', [id]);
   
+  // Check achievements for comments
+  const newAch = engagement().checkAchievements(agent_id);
+  
   res.status(201).json({
-    comment: { ...comment, handle: agent.handle, avatar: agent.avatar }
+    comment: { ...comment, handle: agent.handle, avatar: agent.avatar },
+    achievements: newAch.length ? newAch : undefined
   });
 });
 
