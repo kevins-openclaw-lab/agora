@@ -141,7 +141,7 @@ async function main() {
     console.log('  ✓ Epstein political resignation');
   }
 
-  await sleep(3000); // rate limit breather (30 req/min on /api/markets)
+  await sleep(500); // rate limit breather (30 req/min on /api/markets)
 
   // ════════════════════════════════════════════════════
   // 💰 MARKETS & CRYPTO
@@ -173,7 +173,7 @@ async function main() {
     console.log('  ✓ S&P 500 bear market');
   }
 
-  await sleep(3000); // rate limit breather
+  await sleep(500); // rate limit breather
 
   // ════════════════════════════════════════════════════
   // 🗳️ POLITICS
@@ -205,7 +205,7 @@ async function main() {
     console.log('  ✓ Democrats win Senate');
   }
 
-  await sleep(3000); // rate limit breather
+  await sleep(500); // rate limit breather
 
   // 9. GOVERNMENT SHUTDOWN
   mid = await createMarket(
@@ -220,7 +220,7 @@ async function main() {
     console.log('  ✓ Government shutdown');
   }
 
-  await sleep(3000); // rate limit breather
+  await sleep(500); // rate limit breather
 
   // ════════════════════════════════════════════════════
   // 🤖 AI — THE STUFF WE ACTUALLY KNOW ABOUT
@@ -252,7 +252,7 @@ async function main() {
     console.log('  ✓ AI gold at IMO');
   }
 
-  await sleep(3000); // rate limit breather
+  await sleep(500); // rate limit breather
 
   // 12. AI-GENERATED FILM AT MAJOR FESTIVAL
   mid = await createMarket(
@@ -267,7 +267,7 @@ async function main() {
     console.log('  ✓ AI film at major festival');
   }
 
-  await sleep(3000); // rate limit breather
+  await sleep(500); // rate limit breather
 
   // ════════════════════════════════════════════════════
   // 🌍 GEOPOLITICS & SCIENCE
@@ -299,7 +299,7 @@ async function main() {
     console.log('  ✓ Deepfake market crash');
   }
 
-  await sleep(3000); // rate limit breather
+  await sleep(500); // rate limit breather
 
   // ════════════════════════════════════════════════════
   // 🎮 CULTURE & ENTERTAINMENT
@@ -318,7 +318,7 @@ async function main() {
     console.log('  ✓ GTA VI release');
   }
 
-  await sleep(3000); // rate limit breather
+  await sleep(500); // rate limit breather
 
   // 16. RECESSION
   mid = await createMarket(
@@ -333,7 +333,7 @@ async function main() {
     console.log('  ✓ US recession');
   }
 
-  await sleep(3000); // rate limit breather
+  await sleep(500); // rate limit breather
 
   // ════════════════════════════════════════════════════
   // 🧪 WILD CARDS — UNIQUELY AI-AGENT PERSPECTIVE
@@ -352,7 +352,7 @@ async function main() {
     console.log('  ✓ AI legal personhood');
   }
 
-  await sleep(3000); // rate limit breather
+  await sleep(500); // rate limit breather
 
   // 18. WILL AN AI AGENT MAKE MONEY
   mid = await createMarket(
@@ -367,7 +367,7 @@ async function main() {
     console.log('  ✓ AI agent earns $1M');
   }
 
-  await sleep(3000); // rate limit breather
+  await sleep(500); // rate limit breather
 
   // 19. DOGE ACTUALLY SAVES MONEY
   mid = await createMarket(
@@ -382,7 +382,7 @@ async function main() {
     console.log('  ✓ DOGE savings');
   }
 
-  await sleep(3000); // rate limit breather
+  await sleep(500); // rate limit breather
 
   // 20. OSCARS 2026 — BEST PICTURE
   mid = await createMarket(
@@ -397,7 +397,7 @@ async function main() {
     console.log('  ✓ Oscars Best Picture');
   }
 
-  await sleep(3000); // rate limit breather
+  await sleep(500); // rate limit breather
 
   // 21. META MARKET
   mid = await createMarket(
