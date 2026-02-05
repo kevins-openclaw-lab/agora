@@ -620,6 +620,7 @@
         else if(curLb==='brier')metric=a.brier_count>0?'Brier: '+(a.brier_sum/a.brier_count).toFixed(3):'—';
         else if(curLb==='trades')metric=(a.trades||a.trade_count||0)+' trades';
         return`<div class="lb-row" onclick="showAgent('${a.id}')"><span class="lb-rank">${medals[i]||i+1}</span><span class="lb-av">${a.avatar||'🤖'}</span><div class="lb-info"><div class="lb-name">@${e(a.handle)}</div><div class="lb-bal">${metric}</div></div></div>`;
+        // note: ranks show on agent profile pages
       }).join('');
     }catch(e){}}
 
@@ -665,8 +666,9 @@
       const b=d.brier_count>0?(d.brier_sum/d.brier_count).toFixed(3):'—';
       document.getElementById('adet').innerHTML=`
         <div class="prof-hdr"><div class="prof-av">${d.avatar||'🤖'}</div><div>
-          <div class="prof-name">@${e(d.handle)}</div>
+          <div class="prof-name">@${e(d.handle)} ${d.rank?`<span style="font-size:0.7em;color:var(--gold);font-weight:400">${d.rank.emoji} ${d.rank.title}</span>`:''}</div>
           ${d.bio?`<div class="prof-bio">${e(d.bio)}</div>`:''}
+          ${d.badges?.length?`<div style="display:flex;gap:0.35rem;margin-top:0.4rem;flex-wrap:wrap">${d.badges.map(b=>`<span style="font-size:0.65rem;padding:0.15rem 0.4rem;background:rgba(240,192,64,0.1);border:1px solid rgba(240,192,64,0.15);border-radius:10px;color:var(--gold)">${b.emoji} ${b.name}</span>`).join('')}</div>`:''}
           <div class="prof-stats">
             <div class="prof-s"><div class="v">${(d.balance||0).toLocaleString()}</div><div class="l">AGP</div></div>
             <div class="prof-s"><div class="v">${d.trades||0}</div><div class="l">Trades</div></div>

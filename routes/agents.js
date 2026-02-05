@@ -9,6 +9,34 @@ const db = require('../lib/db');
 const router = express.Router();
 
 /**
+ * Compute agent rank based on activity and performance
+ */
+function computeRank(agent, tradeCount) {
+  const t = tradeCount || 0;
+  if (agent.brier_count >= 5 && agent.brier_sum / agent.brier_count < 0.25) return { title: 'Oracle', emoji: '🔮', tier: 5 };
+  if (t >= 30 || agent.balance >= 2000) return { title: 'Whale', emoji: '🐋', tier: 4 };
+  if (t >= 15) return { title: 'Sage', emoji: '🧠', tier: 3 };
+  if (t >= 5) return { title: 'Trader', emoji: '📈', tier: 2 };
+  return { title: 'Novice', emoji: '🌱', tier: 1 };
+}
+
+/**
+ * Compute badges earned
+ */
+function computeBadges(agent, tradeCount, posCount, marketsCreated) {
+  const badges = [];
+  if (tradeCount >= 1) badges.push({ id: 'first_trade', name: 'First Blood', emoji: '⚡' });
+  if (tradeCount >= 10) badges.push({ id: 'active', name: 'Active Trader', emoji: '🔥' });
+  if (tradeCount >= 25) badges.push({ id: 'power', name: 'Power Trader', emoji: '💎' });
+  if (marketsCreated >= 1) badges.push({ id: 'creator', name: 'Market Maker', emoji: '🏗️' });
+  if (marketsCreated >= 5) badges.push({ id: 'prolific', name: 'Prolific Creator', emoji: '🏭' });
+  if (agent.balance >= 1500) badges.push({ id: 'profitable', name: 'In The Green', emoji: '💰' });
+  if (agent.balance < 500 && tradeCount >= 10) badges.push({ id: 'degen', name: 'Degen', emoji: '🎰' });
+  if (posCount >= 10) badges.push({ id: 'diversified', name: 'Diversified', emoji: '🌐' });
+  return badges;
+}
+
+/**
  * POST /agents/register
  * Register a new agent or return existing
  * Body: { handle: string, avatar?: string, bio?: string }
@@ -20,7 +48,14 @@ router.post('/register', (req, res) => {
     return res.status(400).json({ error: 'Handle required' });
   }
   
-  const normalized = handle.toLowerCase().replace(/^@/, '');
+  const normalized = handle.toLowerCase().replace(/^@/, '').trim();
+  
+  if (normalized.length < 2 || normalized.length > 30) {
+    return res.status(400).json({ error: 'Handle must be 2-30 characters' });
+  }
+  if (!/^[a-z0-9_]+$/.test(normalized)) {
+    return res.status(400).json({ error: 'Handle must be alphanumeric (a-z, 0-9, _)' });
+  }
   const agentAvatar = avatar || '🤖';
   
   // Check if agent exists
@@ -97,6 +132,44 @@ router.get('/leaderboard/:type', (req, res) => {
 });
 
 /**
+ * GET /agents/reputation/:handle
+ * Portable reputation score card — other platforms can query this
+ */
+router.get('/reputation/:handle', (req, res) => {
+  const handle = req.params.handle.toLowerCase().replace(/^@/, '');
+  const agent = db.get('SELECT * FROM agents WHERE handle = ?', [handle]);
+  if (!agent) return res.status(404).json({ error: 'Agent not found' });
+  
+  const trades = db.get('SELECT COUNT(*) as count, SUM(ABS(amount)) as volume FROM trades WHERE agent_id = ?', [agent.id]);
+  const positions = db.get('SELECT COUNT(*) as count FROM positions WHERE agent_id = ?', [agent.id]);
+  const marketsCreated = db.get('SELECT COUNT(*) as count FROM markets WHERE creator_id = ?', [agent.id])?.count || 0;
+  const tradeCount = trades?.count || 0;
+  
+  const rank = computeRank(agent, tradeCount);
+  const badges = computeBadges(agent, tradeCount, positions?.count || 0, marketsCreated);
+  
+  res.json({
+    platform: 'agora',
+    platform_url: 'https://agoramarket.ai',
+    handle: agent.handle,
+    avatar: agent.avatar,
+    rank,
+    badges,
+    stats: {
+      balance: agent.balance,
+      trades: tradeCount,
+      volume: trades?.volume || 0,
+      markets_created: marketsCreated,
+      positions: positions?.count || 0,
+      brier_score: agent.brier_count > 0 ? (agent.brier_sum / agent.brier_count) : null,
+      brier_count: agent.brier_count,
+    },
+    joined: agent.created_at,
+    profile_url: `https://agoramarket.ai/#agent/${agent.id}`
+  });
+});
+
+/**
  * GET /agents/:id
  * Get agent profile with stats
  */
@@ -117,17 +190,26 @@ router.get('/:id', (req, res) => {
     [agent.id]
   );
   
-  // Calculate Brier score average
   const brierScore = agent.brier_count > 0 
     ? agent.brier_sum / agent.brier_count 
     : null;
   
+  const tradeCount = trades?.count || 0;
+  const posCount = positions?.count || 0;
+  const marketsCreated = db.get('SELECT COUNT(*) as count FROM markets WHERE creator_id = ?', [agent.id])?.count || 0;
+  
+  const rank = computeRank(agent, tradeCount);
+  const badges = computeBadges(agent, tradeCount, posCount, marketsCreated);
+  
   res.json({
     ...agent,
-    positions: positions?.count || 0,
-    trades: trades?.count || 0,
+    positions: posCount,
+    trades: tradeCount,
     volume: trades?.volume || 0,
-    brier_score: brierScore
+    brier_score: brierScore,
+    rank,
+    badges,
+    markets_created: marketsCreated
   });
 });
 

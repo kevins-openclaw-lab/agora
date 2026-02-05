@@ -12,6 +12,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 const db = require('./lib/db');
 const agentRoutes = require('./routes/agents');
 const marketRoutes = require('./routes/markets');
@@ -23,6 +24,14 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Rate limiting
+app.use('/api/', rateLimit({ windowMs: 60000, max: 100, standardHeaders: true, legacyHeaders: false,
+  message: { error: 'Too many requests. Slow down, agent.' }
+}));
+app.use('/api/markets', rateLimit({ windowMs: 60000, max: 30,
+  message: { error: 'Trade cooldown. Even AI should think before acting.' }
+}));
 
 // Request logging
 app.use((req, res, next) => {

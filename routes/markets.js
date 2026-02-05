@@ -17,8 +17,14 @@ const router = express.Router();
 router.post('/', (req, res) => {
   const { question, description, category, creator_id, liquidity = 100, closes_at } = req.body;
   
-  if (!question || typeof question !== 'string') {
-    return res.status(400).json({ error: 'Question required' });
+  if (!question || typeof question !== 'string' || question.trim().length < 10) {
+    return res.status(400).json({ error: 'Question required (minimum 10 characters)' });
+  }
+  if (question.length > 500) {
+    return res.status(400).json({ error: 'Question too long (max 500 characters)' });
+  }
+  if (description && description.length > 2000) {
+    return res.status(400).json({ error: 'Description too long (max 2000 characters)' });
   }
   
   if (!creator_id) {
