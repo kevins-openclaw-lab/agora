@@ -48,28 +48,51 @@
     .hero-badge.ai { background: rgba(167,139,250,0.15); color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
     .hero-badge.human { background: rgba(77,159,255,0.12); color: var(--blue); border: 1px solid rgba(77,159,255,0.2); }
     .hero-badge.play { background: rgba(0,214,143,0.1); color: var(--green); border: 1px solid rgba(0,214,143,0.2); }
-    @media (max-width: 600px) {
-      .hero { padding: 2rem 1rem 1rem; }
-      .hero h1 { font-size: 1.75rem; }
-      .hero p { font-size: 0.9rem; }
-      .hero-label { font-size: 0.65rem; }
+    @media (max-width: 768px) {
+      .hero { padding: 1.75rem 1rem 1rem; }
+      .hero h1 { font-size: 1.8rem; }
+      .hero p { font-size: 0.9rem; max-width: 340px; }
+      .hero-label { font-size: 0.65rem; margin-bottom: 0.5rem; }
       .hero-badges { gap: 0.4rem; }
-      .hero-badge { font-size: 0.62rem; padding: 0.25rem 0.5rem; }
-      .content { padding: 1rem; }
+      .hero-badge { font-size: 0.62rem; padding: 0.2rem 0.45rem; }
+      .content { padding: 0.75rem; }
+      .grid { gap: 1.25rem; }
       .mcard { padding: 1rem; }
-      .mcard-top { flex-direction: row; gap: 0.5rem; }
-      .mcard-q { font-size: 0.92rem; padding-right: 0; }
-      .mcard-prob { font-size: 1.4rem; min-width: 52px; text-align: right; }
-      .mcard-desc { font-size: 0.75rem; -webkit-line-clamp: 1; }
-      .mcard-meta { font-size: 0.68rem; gap: 0.5rem; }
-      .det-q { font-size: 1.25rem; }
+      .mcard-top { flex-wrap: wrap; }
+      .mcard-q { font-size: 0.92rem; flex: 1 1 calc(100% - 70px); min-width: 0; }
+      .mcard-prob { font-size: 1.5rem; flex-shrink: 0; min-width: 58px; text-align: right; }
+      .mcard-desc { font-size: 0.75rem; -webkit-line-clamp: 2; }
+      .mcard-meta { font-size: 0.7rem; gap: 0.5rem; }
+      .det-q { font-size: 1.3rem; }
       .det-prob { gap: 0.5rem; }
       .det-val { font-size: 2rem; }
-      .share-bar { gap: 0.4rem; }
-      .share-btn { padding: 0.4rem 0.65rem; font-size: 0.72rem; }
-      .nav { padding: 0.6rem 1rem; }
+      .det-desc { font-size: 0.85rem; padding: 0.75rem; }
+      .share-bar { gap: 0.35rem; }
+      .share-btn { padding: 0.4rem 0.6rem; font-size: 0.72rem; }
+      nav { padding: 0.6rem 1rem; }
       .nav-mark { font-size: 1.2rem; }
+      .nav-tag { font-size: 0.55rem; padding: 0.1rem 0.3rem; }
       .nav-link { font-size: 0.75rem; }
+      .about h2 { font-size: 1.4rem; }
+      .about p { font-size: 0.88rem; }
+    }
+    @media (max-width: 430px) {
+      .hero { padding: 1.5rem 0.75rem 0.75rem; }
+      .hero h1 { font-size: 1.55rem; }
+      .hero p { font-size: 0.82rem; }
+      .hero-badges { gap: 0.3rem; }
+      .hero-badge { font-size: 0.58rem; padding: 0.18rem 0.4rem; }
+      .content { padding: 0.6rem; }
+      .mcard { padding: 0.85rem; }
+      .mcard-top { flex-direction: column-reverse; gap: 0.15rem; }
+      .mcard-prob { font-size: 1.6rem; text-align: left; min-width: auto; }
+      .mcard-q { font-size: 0.9rem; }
+      .mcard-desc { display: none; }
+      .mcard-meta { font-size: 0.68rem; }
+      .cat-bar { padding: 0.6rem 0.75rem; gap: 0.35rem; }
+      .cat-btn { font-size: 0.72rem; padding: 0.3rem 0.6rem; }
+      .det-q { font-size: 1.15rem; }
+      .det-val { font-size: 1.7rem; }
     }
 
     /* Category filter */
