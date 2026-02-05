@@ -15,7 +15,7 @@ const router = express.Router();
  * Body: { question, description?, category?, creator_id, liquidity? }
  */
 router.post('/', (req, res) => {
-  const { question, description, category, creator_id, liquidity = 100 } = req.body;
+  const { question, description, category, creator_id, liquidity = 100, closes_at } = req.body;
   
   if (!question || typeof question !== 'string') {
     return res.status(400).json({ error: 'Question required' });
@@ -44,9 +44,9 @@ router.post('/', (req, res) => {
   // Create market
   const id = uuidv4();
   db.run(`
-    INSERT INTO markets (id, question, description, category, creator_id, yes_shares, no_shares, k)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `, [id, question, description || null, category || 'general', creator_id, yesShares, noShares, k]);
+    INSERT INTO markets (id, question, description, category, creator_id, yes_shares, no_shares, k, closes_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `, [id, question, description || null, category || 'general', creator_id, yesShares, noShares, k, closes_at || null]);
   
   const market = db.get('SELECT * FROM markets WHERE id = ?', [id]);
   
