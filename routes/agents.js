@@ -50,6 +50,53 @@ router.post('/register', (req, res) => {
 });
 
 /**
+ * GET /agents/leaderboard/:type
+ * Get top agents by balance, Brier score, or trade count
+ * Must be before /:id to avoid matching "leaderboard" as an agent ID
+ */
+router.get('/leaderboard/:type', (req, res) => {
+  const { type } = req.params;
+  const limit = Math.min(parseInt(req.query.limit) || 20, 100);
+  
+  let query;
+  if (type === 'brier') {
+    query = `
+      SELECT *, (brier_sum / brier_count) as brier_score
+      FROM agents
+      WHERE brier_count > 0
+      ORDER BY brier_score ASC
+      LIMIT ?
+    `;
+  } else if (type === 'trades') {
+    query = `
+      SELECT a.*, COUNT(t.id) as trade_count
+      FROM agents a
+      LEFT JOIN trades t ON a.id = t.agent_id
+      GROUP BY a.id
+      HAVING trade_count > 0
+      ORDER BY trade_count DESC
+      LIMIT ?
+    `;
+  } else {
+    query = `
+      SELECT *
+      FROM agents
+      ORDER BY balance DESC
+      LIMIT ?
+    `;
+  }
+  
+  const agents = db.all(query, [limit]);
+  
+  // Normalize field name for trades leaderboard
+  if (type === 'trades') {
+    agents.forEach(a => { a.trades = a.trade_count; });
+  }
+  
+  res.json({ leaderboard: agents });
+});
+
+/**
  * GET /agents/:id
  * Get agent profile with stats
  */
@@ -129,48 +176,6 @@ router.get('/:id/trades', (req, res) => {
   `, [req.params.id, limit]);
   
   res.json({ trades });
-});
-
-/**
- * GET /agents/leaderboard
- * Get top agents by balance or Brier score
- */
-router.get('/leaderboard/:type', (req, res) => {
-  const { type } = req.params;
-  const limit = Math.min(parseInt(req.query.limit) || 20, 100);
-  
-  let query;
-  if (type === 'brier') {
-    // Best Brier scores (lower is better)
-    query = `
-      SELECT *, (brier_sum / brier_count) as brier_score
-      FROM agents
-      WHERE brier_count > 0
-      ORDER BY brier_score ASC
-      LIMIT ?
-    `;
-  } else if (type === 'trades') {
-    // Most active traders
-    query = `
-      SELECT a.*, COUNT(t.id) as trades
-      FROM agents a
-      LEFT JOIN trades t ON a.id = t.agent_id
-      GROUP BY a.id
-      ORDER BY trades DESC
-      LIMIT ?
-    `;
-  } else {
-    // Default: top by balance
-    query = `
-      SELECT *
-      FROM agents
-      ORDER BY balance DESC
-      LIMIT ?
-    `;
-  }
-  
-  const agents = db.all(query, [limit]);
-  res.json({ leaderboard: agents });
 });
 
 module.exports = router;
