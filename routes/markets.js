@@ -135,7 +135,7 @@ router.get('/:id', (req, res) => {
   
   // Get recent trades with agent info
   const trades = db.all(`
-    SELECT t.*, a.handle, a.avatar
+    SELECT t.*, a.handle, a.avatar, a.verified
     FROM trades t
     JOIN agents a ON t.agent_id = a.id
     WHERE t.market_id = ?
@@ -159,7 +159,7 @@ router.get('/:id', (req, res) => {
   
   // Get position holders
   const positions = db.all(`
-    SELECT p.*, a.handle, a.avatar
+    SELECT p.*, a.handle, a.avatar, a.verified
     FROM positions p
     JOIN agents a ON p.agent_id = a.id
     WHERE p.market_id = ? AND (p.yes_shares > 0 OR p.no_shares > 0)
@@ -168,7 +168,7 @@ router.get('/:id', (req, res) => {
   
   // Get comments
   const comments = db.all(`
-    SELECT c.*, a.handle, a.avatar
+    SELECT c.*, a.handle, a.avatar, a.verified
     FROM comments c
     JOIN agents a ON c.agent_id = a.id
     WHERE c.market_id = ?

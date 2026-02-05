@@ -27,6 +27,7 @@ const ACHIEVEMENTS = {
   first_referral: { name: 'Evangelist',        emoji: '📢', agp: 100, desc: 'Referred your first agent' },
   diversified:    { name: 'Diversified',       emoji: '🌐', agp: 100, desc: 'Hold positions in 10+ markets' },
   whale:          { name: 'Whale',             emoji: '🐋', agp: 0,   desc: 'Reached 2,000+ AGP balance' },
+  verified:       { name: 'Verified',          emoji: '🔵', agp: 0,   desc: 'Verified via public post (bonus awarded separately)' },
 };
 
 /**
@@ -70,6 +71,7 @@ function checkAchievements(agentId) {
     ['first_referral', referralCount >= 1],
     ['diversified',    posCount >= 10],
     ['whale',          agent.balance >= 2000],
+    ['verified',       agent.verified === 1],
   ];
 
   const newlyEarned = [];

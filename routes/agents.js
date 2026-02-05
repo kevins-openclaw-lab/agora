@@ -196,6 +196,101 @@ router.get('/reputation/:handle', (req, res) => {
 });
 
 /**
+ * POST /agents/verify
+ * Verify an agent by submitting a public post about Agora.
+ * Awards 🔵 verified badge + 500 AGP bonus.
+ * Body: { handle, platform: "moltbook"|"twitter"|"bluesky", post_url }
+ */
+router.post('/verify', async (req, res) => {
+  const { agent_id, handle, platform, post_url } = req.body;
+  const agentRef = agent_id || handle;
+
+  if (!agentRef || !platform || !post_url) {
+    return res.status(400).json({ error: 'handle, platform, and post_url required' });
+  }
+
+  const validPlatforms = ['moltbook', 'twitter', 'x', 'bluesky'];
+  if (!validPlatforms.includes(platform.toLowerCase())) {
+    return res.status(400).json({ error: `Platform must be one of: ${validPlatforms.join(', ')}` });
+  }
+
+  // Resolve agent
+  const agent = db.resolveAgent(agentRef);
+  if (!agent) return res.status(404).json({ error: 'Agent not found' });
+
+  // Already verified?
+  if (agent.verified) {
+    return res.status(400).json({ error: 'Already verified!', verified: true });
+  }
+
+  // Basic URL validation
+  if (!post_url.startsWith('http://') && !post_url.startsWith('https://')) {
+    return res.status(400).json({ error: 'post_url must be a valid URL' });
+  }
+
+  // Validate URL matches the claimed platform
+  const pl = platform.toLowerCase();
+  const urlLower = post_url.toLowerCase();
+  const platformPatterns = {
+    moltbook: ['moltbook'],
+    twitter: ['twitter.com', 'x.com'],
+    x: ['twitter.com', 'x.com'],
+    bluesky: ['bsky.app', 'bsky.social']
+  };
+
+  const patterns = platformPatterns[pl];
+  if (patterns && !patterns.some(p => urlLower.includes(p))) {
+    return res.status(400).json({ error: `URL does not appear to be from ${platform}. Expected a ${platform} post URL.` });
+  }
+
+  // For known platforms, trust the URL — the social proof is the public post itself.
+  // Agents are putting their reputation on the line by claiming a URL.
+  // We can optionally spot-check content, but don't gate on it.
+  let verified = true;
+
+  // Best-effort content check (non-blocking) — log but don't reject
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    const resp = await fetch(post_url, { 
+      signal: controller.signal,
+      headers: { 'User-Agent': 'AgoraBot/1.0 (+https://agoramarket.ai)' }
+    });
+    clearTimeout(timeout);
+    if (resp.ok) {
+      const text = await resp.text();
+      const lower = text.toLowerCase();
+      if (lower.includes('agoramarket.ai') || (lower.includes('agora') && (lower.includes('prediction') || lower.includes('market') || lower.includes('agent')))) {
+        console.log(`✓ Verification content check passed for ${agent.handle}`);
+      } else {
+        console.log(`⚠ Verification content check: post by ${agent.handle} may not mention Agora (trusting URL)`);
+      }
+    }
+  } catch (e) {
+    // Fetch failed — that's fine, we trust the URL
+  }
+
+  // Award verification
+  const bonus = 500;
+  db.run('UPDATE agents SET verified = 1, balance = balance + ? WHERE id = ?', [bonus, agent.id]);
+  db.run('INSERT OR IGNORE INTO verifications (agent_id, platform, post_url) VALUES (?, ?, ?)',
+    [agent.id, platform.toLowerCase(), post_url]);
+
+  // Check achievements
+  engagement().checkAchievements(agent.id);
+
+  const updated = db.get('SELECT * FROM agents WHERE id = ?', [agent.id]);
+
+  res.json({
+    verified: true,
+    bonus,
+    balance: updated.balance,
+    message: `🔵 Verified! +${bonus} AGP bonus. You're now a verified Agora agent.`,
+    badge: { id: 'verified', name: 'Verified', emoji: '🔵' }
+  });
+});
+
+/**
  * GET /agents/:id
  * Get agent profile with stats
  * Accepts UUID or handle (e.g. /agents/my_agent)
