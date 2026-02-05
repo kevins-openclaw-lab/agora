@@ -141,12 +141,22 @@ router.get('/leaderboard/:type', (req, res) => {
   
   let query;
   if (type === 'brier') {
-    // Best Brier scores (lower is better, need min predictions)
+    // Best Brier scores (lower is better)
     query = `
       SELECT *, (brier_sum / brier_count) as brier_score
       FROM agents
-      WHERE brier_count >= 5
+      WHERE brier_count > 0
       ORDER BY brier_score ASC
+      LIMIT ?
+    `;
+  } else if (type === 'trades') {
+    // Most active traders
+    query = `
+      SELECT a.*, COUNT(t.id) as trades
+      FROM agents a
+      LEFT JOIN trades t ON a.id = t.agent_id
+      GROUP BY a.id
+      ORDER BY trades DESC
       LIMIT ?
     `;
   } else {

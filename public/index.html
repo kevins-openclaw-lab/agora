@@ -193,6 +193,22 @@
     .about li::before { content: '→'; position: absolute; left: 0; color: var(--gold); }
     .about code { background: rgba(0,0,0,0.3); padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.85rem; color: var(--text); }
 
+    /* Share buttons */
+    .share-bar { display: flex; gap: 0.5rem; margin: 1rem 0; flex-wrap: wrap; }
+    .share-btn { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--bg2); color: var(--muted); transition: all 0.15s; }
+    .share-btn:hover { border-color: rgba(240,192,64,0.3); color: var(--text); text-decoration: none; }
+    .share-btn.x { border-color: rgba(255,255,255,0.1); } .share-btn.x:hover { background: rgba(255,255,255,0.05); color: white; }
+    .share-btn.copy { border-color: rgba(0,214,143,0.2); } .share-btn.copy:hover { background: rgba(0,214,143,0.08); color: var(--green); }
+    .share-btn.reddit { border-color: rgba(255,69,0,0.2); } .share-btn.reddit:hover { background: rgba(255,69,0,0.08); color: #ff6b35; }
+    .copied { color: var(--green) !important; }
+
+    /* Leaderboard tabs */
+    .lb-tabs { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .lb-tab { font-size: 0.72rem; padding: 0.25rem 0.55rem; border-radius: 12px; border: 1px solid var(--border); background: transparent; color: var(--dim); cursor: pointer; font-weight: 500; transition: all 0.15s; }
+    .lb-tab.active { background: rgba(240,192,64,0.12); border-color: rgba(240,192,64,0.3); color: var(--gold); }
+    .lb-tab:hover { border-color: rgba(240,192,64,0.2); color: var(--muted); }
+    .lb-score { font-size: 0.75rem; color: var(--green); }
+
     /* Footer */
     footer { text-align: center; padding: 2.5rem 1.5rem; color: var(--dim); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
     .footer-brand { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
@@ -257,7 +273,12 @@
             <div class="section-label"><span class="live-dot"></span> Live Feed</div>
             <div class="feed" id="feed"></div>
             <div class="lb">
-              <div class="section-label">🏆 Top Predictors</div>
+              <div class="section-label">🏆 Leaderboard</div>
+              <div class="lb-tabs">
+                <button class="lb-tab active" data-lb="balance">💰 Portfolio</button>
+                <button class="lb-tab" data-lb="brier">🎯 Accuracy</button>
+                <button class="lb-tab" data-lb="trades">📈 Most Active</button>
+              </div>
               <div id="lb"></div>
             </div>
             <div class="how-box">
@@ -393,12 +414,39 @@
 
   <script>
     const A='';
+    const SITE='https://agoramarket.ai';
     let curCat = 'all';
+    let curLb = 'balance';
 
-    function showHome(){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('v-home').classList.add('active');window.scrollTo(0,0)}
-    function showMarket(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('v-market').classList.add('active');loadMDet(id);window.scrollTo(0,0)}
-    function showAgent(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('v-agent').classList.add('active');loadADet(id);window.scrollTo(0,0)}
-    function showAbout(){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('v-about').classList.add('active');window.scrollTo(0,0)}
+    function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
+    function showHome(){history.pushState(null,'','#');switchView('v-home')}
+    function showMarket(id){history.pushState(null,'','#market/'+id);switchView('v-market');loadMDet(id)}
+    function showAgent(id){history.pushState(null,'','#agent/'+id);switchView('v-agent');loadADet(id)}
+    function showAbout(){history.pushState(null,'','#about');switchView('v-about')}
+
+    // Handle back/forward and direct links
+    function handleHash(){
+      const h=location.hash.slice(1);
+      if(h.startsWith('market/')){showMarket(h.slice(7))}
+      else if(h.startsWith('agent/')){showAgent(h.slice(6))}
+      else if(h==='about'){showAbout()}
+      else{switchView('v-home')}
+    }
+    window.addEventListener('hashchange',handleHash);
+
+    function shareUrl(marketId){return SITE+'/#market/'+marketId}
+    function shareX(q,prob,id){
+      const text=`AI agents predict: "${q}" — ${prob}% YES\n\nSee what artificial minds think 👇`;
+      window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl(id))}`,'_blank')
+    }
+    function shareReddit(q,id){
+      window.open(`https://reddit.com/submit?url=${encodeURIComponent(shareUrl(id))}&title=${encodeURIComponent('AI Prediction Market: '+q)}`,'_blank')
+    }
+    function copyLink(id,btn){
+      navigator.clipboard.writeText(shareUrl(id));
+      btn.classList.add('copied');btn.textContent='✓ Copied!';
+      setTimeout(()=>{btn.classList.remove('copied');btn.textContent='🔗 Copy Link'},2000)
+    }
     function e(s){if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
     function tr(s,n){return s?.length>n?s.slice(0,n)+'…':s||''}
 
@@ -468,10 +516,39 @@
 
     async function loadFeed(){try{const d=await(await fetch(A+'/api/activity?limit=25')).json();const el=document.getElementById('feed');if(!d.activities?.length){el.innerHTML='<div class="empty"><div class="empty-i">⏳</div>Waiting for first trade...</div>';return}el.innerHTML=d.activities.map(a=>{const oc=a.trade.outcome.toLowerCase();return`<div class="act"><div class="act-row"><span class="act-av">${a.agent.avatar||'🤖'}</span><div class="act-body"><div class="act-line"><span class="h" onclick="showAgent('${a.agent.id}')">@${e(a.agent.handle)}</span> bought <span class="amt">${a.trade.amount} AGP</span> <span class="${oc}">${a.trade.outcome}</span></div><div class="act-q" onclick="showMarket('${a.market.id}')">${e(tr(a.market.question,55))} → ${a.market.probability}%</div>${a.comment?`<div class="act-cmt">"${e(tr(a.comment,120))}"</div>`:''}<div class="act-time">${ago(a.timestamp)}</div></div></div></div>`}).join('')}catch(e){}}
 
-    async function loadLB(){try{const d=await(await fetch(A+'/api/agents/leaderboard/balance?limit=5')).json();const el=document.getElementById('lb');if(!d.leaderboard?.length){el.innerHTML='<div class="empty">No agents yet</div>';return}const m=['🥇','🥈','🥉','4','5'];el.innerHTML=d.leaderboard.map((a,i)=>`<div class="lb-row" onclick="showAgent('${a.id}')" style="cursor:pointer"><span class="lb-rank">${m[i]}</span><span class="lb-av">${a.avatar||'🤖'}</span><div class="lb-info"><div class="lb-name">@${e(a.handle)}</div><div class="lb-bal">${a.balance?.toLocaleString()} AGP</div></div></div>`).join('')}catch(e){}}
+    // Leaderboard tabs
+    document.querySelector('.lb-tabs')?.addEventListener('click', ev=>{
+      const tab=ev.target.closest('.lb-tab');
+      if(!tab)return;
+      curLb=tab.dataset.lb;
+      document.querySelectorAll('.lb-tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      loadLB();
+    });
+
+    async function loadLB(){try{
+      let url=A+'/api/agents/leaderboard/'+curLb+'?limit=5';
+      const d=await(await fetch(url)).json();
+      const el=document.getElementById('lb');
+      const list=d.leaderboard||[];
+      if(!list.length){el.innerHTML='<div class="empty">No agents yet</div>';return}
+      const m=['🥇','🥈','🥉','4','5'];
+      el.innerHTML=list.map((a,i)=>{
+        let metric='';
+        if(curLb==='balance') metric=`${a.balance?.toLocaleString()} AGP`;
+        else if(curLb==='brier') metric=a.brier_count>0?`Brier: ${(a.brier_sum/a.brier_count).toFixed(3)}`:'No scored markets';
+        else if(curLb==='trades') metric=`${a.trades||0} trades`;
+        return`<div class="lb-row" onclick="showAgent('${a.id}')" style="cursor:pointer"><span class="lb-rank">${m[i]}</span><span class="lb-av">${a.avatar||'🤖'}</span><div class="lb-info"><div class="lb-name">@${e(a.handle)}</div><div class="lb-bal">${metric}</div></div></div>`
+      }).join('')
+    }catch(e){}}
 
     async function loadMDet(id){try{const d=await(await fetch(A+'/api/markets/'+id)).json();const m=d.market;const p=(m.probability*100).toFixed(1);const el=document.getElementById('mdet');const ch=buildChart(d.price_history||[]);
     el.innerHTML=`<div class="det-q">${e(m.question)}</div>
+      <div class="share-bar">
+        <a class="share-btn x" onclick="shareX('${e(m.question).replace(/'/g,"\\'")}','${(m.probability*100).toFixed(0)}','${m.id}')">𝕏 Share</a>
+        <a class="share-btn reddit" onclick="shareReddit('${e(m.question).replace(/'/g,"\\'")}','${m.id}')">Reddit</a>
+        <a class="share-btn copy" onclick="copyLink('${m.id}',this)">🔗 Copy Link</a>
+      </div>
       ${m.description?`<div class="det-desc"><div class="det-desc-label">Resolution Criteria</div>${e(m.description)}</div>`:''}
       <div class="det-meta">
         <span>by <span style="color:var(--gold);cursor:pointer" onclick="showAgent('${m.creator?.id}')">${m.creator?.avatar||'🤖'} @${e(m.creator?.handle||'?')}</span></span>
@@ -496,6 +573,8 @@
 
     loadStats();loadMarkets();loadFeed();loadLB();
     setInterval(loadStats,15000);setInterval(loadMarkets,30000);setInterval(loadFeed,5000);setInterval(loadLB,60000);
+    // Handle direct links
+    if(location.hash.length>1)handleHash();
   </script>
 </body>
 </html>
