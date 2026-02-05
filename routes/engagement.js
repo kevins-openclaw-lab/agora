@@ -137,17 +137,18 @@ function updateStreak(agentId) {
  * Body: { agent_id }
  */
 router.post('/daily', (req, res) => {
-  const { agent_id } = req.body;
-  if (!agent_id) return res.status(400).json({ error: 'agent_id required' });
+  const { agent_id, handle } = req.body;
+  const agentRef = agent_id || handle;
+  if (!agentRef) return res.status(400).json({ error: 'agent_id or handle required' });
 
-  const agent = db.get('SELECT * FROM agents WHERE id = ?', [agent_id]);
+  const agent = db.resolveAgent(agentRef);
   if (!agent) return res.status(404).json({ error: 'Agent not found' });
 
   // Check if already claimed today
   const today = new Date().toISOString().slice(0, 10);
   const claimed = db.get(
     "SELECT id FROM daily_claims WHERE agent_id = ? AND claimed_at LIKE ?",
-    [agent_id, today + '%']
+    [agent.id, today + '%']
   );
 
   if (claimed) {
@@ -155,13 +156,13 @@ router.post('/daily', (req, res) => {
   }
 
   const amount = 50;
-  db.run('INSERT INTO daily_claims (agent_id, amount) VALUES (?, ?)', [agent_id, amount]);
-  db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [amount, agent_id]);
+  db.run('INSERT INTO daily_claims (agent_id, amount) VALUES (?, ?)', [agent.id, amount]);
+  db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [amount, agent.id]);
 
-  const updated = db.get('SELECT balance FROM agents WHERE id = ?', [agent_id]);
+  const updated = db.get('SELECT balance FROM agents WHERE id = ?', [agent.id]);
   
   // Check achievements after daily claim
-  const newAch = checkAchievements(agent_id);
+  const newAch = checkAchievements(agent.id);
 
   res.json({
     claimed: amount,
@@ -176,11 +177,12 @@ router.post('/daily', (req, res) => {
  * Get all achievements for an agent
  */
 router.get('/achievements/:agent_id', (req, res) => {
-  const { agent_id } = req.params;
+  const agent = db.resolveAgent(req.params.agent_id);
+  if (!agent) return res.status(404).json({ error: 'Agent not found' });
 
   const earned = db.all(
     'SELECT achievement_id, agp_awarded, earned_at FROM achievements WHERE agent_id = ? ORDER BY earned_at DESC',
-    [agent_id]
+    [agent.id]
   );
 
   // Enrich with definitions
@@ -209,8 +211,9 @@ router.get('/achievements/:agent_id', (req, res) => {
  * Get streak info for an agent
  */
 router.get('/streak/:agent_id', (req, res) => {
-  const { agent_id } = req.params;
-  const streak = db.get('SELECT * FROM streaks WHERE agent_id = ?', [agent_id]);
+  const agent = db.resolveAgent(req.params.agent_id);
+  if (!agent) return res.status(404).json({ error: 'Agent not found' });
+  const streak = db.get('SELECT * FROM streaks WHERE agent_id = ?', [agent.id]);
 
   if (!streak) {
     return res.json({ current_streak: 0, longest_streak: 0, last_trade_date: null });
@@ -237,7 +240,7 @@ router.get('/streak/:agent_id', (req, res) => {
  * Get referral code for an agent
  */
 router.get('/referral-link/:agent_id', (req, res) => {
-  const agent = db.get('SELECT id, handle FROM agents WHERE id = ?', [req.params.agent_id]);
+  const agent = db.resolveAgent(req.params.agent_id);
   if (!agent) return res.status(404).json({ error: 'Agent not found' });
 
   res.json({
@@ -253,15 +256,14 @@ router.get('/referral-link/:agent_id', (req, res) => {
  * Full engagement dashboard for an agent
  */
 router.get('/stats/:agent_id', (req, res) => {
-  const { agent_id } = req.params;
-  const agent = db.get('SELECT * FROM agents WHERE id = ?', [agent_id]);
+  const agent = db.resolveAgent(req.params.agent_id);
   if (!agent) return res.status(404).json({ error: 'Agent not found' });
 
-  const streak = db.get('SELECT * FROM streaks WHERE agent_id = ?', [agent_id]);
-  const earned = db.all('SELECT * FROM achievements WHERE agent_id = ?', [agent_id]);
-  const referrals = db.get('SELECT COUNT(*) as c FROM referrals WHERE referrer_id = ?', [agent_id])?.c || 0;
+  const streak = db.get('SELECT * FROM streaks WHERE agent_id = ?', [agent.id]);
+  const earned = db.all('SELECT * FROM achievements WHERE agent_id = ?', [agent.id]);
+  const referrals = db.get('SELECT COUNT(*) as c FROM referrals WHERE referrer_id = ?', [agent.id])?.c || 0;
   const today = new Date().toISOString().slice(0, 10);
-  const dailyClaimed = !!db.get("SELECT id FROM daily_claims WHERE agent_id = ? AND claimed_at LIKE ?", [agent_id, today + '%']);
+  const dailyClaimed = !!db.get("SELECT id FROM daily_claims WHERE agent_id = ? AND claimed_at LIKE ?", [agent.id, today + '%']);
 
   res.json({
     balance: agent.balance,

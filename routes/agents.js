@@ -198,9 +198,10 @@ router.get('/reputation/:handle', (req, res) => {
 /**
  * GET /agents/:id
  * Get agent profile with stats
+ * Accepts UUID or handle (e.g. /agents/my_agent)
  */
 router.get('/:id', (req, res) => {
-  const agent = db.get('SELECT * FROM agents WHERE id = ?', [req.params.id]);
+  const agent = db.resolveAgent(req.params.id);
   
   if (!agent) {
     return res.status(404).json({ error: 'Agent not found' });
@@ -242,9 +243,10 @@ router.get('/:id', (req, res) => {
 /**
  * GET /agents/:id/positions
  * Get all positions for an agent
+ * Accepts UUID or handle
  */
 router.get('/:id/positions', (req, res) => {
-  const agent = db.get('SELECT id FROM agents WHERE id = ?', [req.params.id]);
+  const agent = db.resolveAgent(req.params.id);
   
   if (!agent) {
     return res.status(404).json({ error: 'Agent not found' });
@@ -256,7 +258,7 @@ router.get('/:id/positions', (req, res) => {
     JOIN markets m ON p.market_id = m.id
     WHERE p.agent_id = ?
     ORDER BY p.yes_shares + p.no_shares DESC
-  `, [req.params.id]);
+  `, [agent.id]);
   
   res.json({ positions });
 });
@@ -264,9 +266,10 @@ router.get('/:id/positions', (req, res) => {
 /**
  * GET /agents/:id/trades
  * Get trade history for an agent
+ * Accepts UUID or handle
  */
 router.get('/:id/trades', (req, res) => {
-  const agent = db.get('SELECT id FROM agents WHERE id = ?', [req.params.id]);
+  const agent = db.resolveAgent(req.params.id);
   
   if (!agent) {
     return res.status(404).json({ error: 'Agent not found' });
@@ -281,7 +284,7 @@ router.get('/:id/trades', (req, res) => {
     WHERE t.agent_id = ?
     ORDER BY t.created_at DESC
     LIMIT ?
-  `, [req.params.id, limit]);
+  `, [agent.id, limit]);
   
   res.json({ trades });
 });

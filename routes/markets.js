@@ -35,14 +35,15 @@ router.post('/', (req, res) => {
   }
   
   if (!creator_id) {
-    return res.status(400).json({ error: 'Creator ID required' });
+    return res.status(400).json({ error: 'creator_id required (UUID or handle)' });
   }
   
-  // Verify creator exists and has enough balance
-  const creator = db.get('SELECT * FROM agents WHERE id = ?', [creator_id]);
+  // Verify creator exists and has enough balance (accepts UUID or handle)
+  const creator = db.resolveAgent(creator_id);
   if (!creator) {
     return res.status(404).json({ error: 'Creator not found' });
   }
+  const resolvedCreatorId = creator.id;
   
   if (creator.balance < liquidity) {
     return res.status(400).json({ error: 'Insufficient balance for liquidity' });
@@ -52,19 +53,19 @@ router.post('/', (req, res) => {
   const { yesShares, noShares, k } = amm.initializeMarket(liquidity);
   
   // Deduct liquidity from creator
-  db.run('UPDATE agents SET balance = balance - ? WHERE id = ?', [liquidity, creator_id]);
+  db.run('UPDATE agents SET balance = balance - ? WHERE id = ?', [liquidity, resolvedCreatorId]);
   
   // Create market
   const id = uuidv4();
   db.run(`
     INSERT INTO markets (id, question, description, category, creator_id, yes_shares, no_shares, k, closes_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `, [id, question, description || null, category || 'general', creator_id, yesShares, noShares, k, closes_at || null]);
+  `, [id, question, description || null, category || 'general', resolvedCreatorId, yesShares, noShares, k, closes_at || null]);
   
   const market = db.get('SELECT * FROM markets WHERE id = ?', [id]);
   
   // Check achievements for market creation
-  const newAch = engagement().checkAchievements(creator_id);
+  const newAch = engagement().checkAchievements(resolvedCreatorId);
   
   res.status(201).json({
     market: {
@@ -194,10 +195,11 @@ router.get('/:id', (req, res) => {
  * Body: { agent_id, outcome: 'yes'|'no', amount, comment? }
  */
 router.post('/:id/trade', (req, res) => {
-  const { agent_id, outcome, amount, comment } = req.body;
+  const { agent_id, handle, outcome, amount, comment } = req.body;
+  const agentRef = agent_id || handle;
   
-  if (!agent_id || !outcome || !amount) {
-    return res.status(400).json({ error: 'agent_id, outcome, and amount required' });
+  if (!agentRef || !outcome || !amount) {
+    return res.status(400).json({ error: 'agent_id (or handle), outcome, and amount required' });
   }
   
   if (!['yes', 'no'].includes(outcome)) {
@@ -218,11 +220,12 @@ router.post('/:id/trade', (req, res) => {
     return res.status(400).json({ error: 'Market is not open for trading' });
   }
   
-  // Get agent
-  const agent = db.get('SELECT * FROM agents WHERE id = ?', [agent_id]);
+  // Get agent (accepts UUID or handle)
+  const agent = db.resolveAgent(agentRef);
   if (!agent) {
-    return res.status(404).json({ error: 'Agent not found' });
+    return res.status(404).json({ error: 'Agent not found. Register first: POST /api/agents/register {handle: "your_handle"}' });
   }
+  const agent_id_resolved = agent.id;
   
   if (agent.balance < amount) {
     return res.status(400).json({ error: 'Insufficient balance' });
@@ -243,7 +246,7 @@ router.post('/:id/trade', (req, res) => {
   // Execute trade
   // 1. Deduct from agent balance
   db.run('UPDATE agents SET balance = balance - ?, last_active = CURRENT_TIMESTAMP WHERE id = ?', 
-    [amount, agent_id]);
+    [amount, agent_id_resolved]);
   
   // 2. Update market AMM
   db.run('UPDATE markets SET yes_shares = ?, no_shares = ?, volume = volume + ? WHERE id = ?',
@@ -252,7 +255,7 @@ router.post('/:id/trade', (req, res) => {
   // 3. Update or create position
   const position = db.get(
     'SELECT * FROM positions WHERE agent_id = ? AND market_id = ?',
-    [agent_id, market.id]
+    [agent_id_resolved, market.id]
   );
   
   if (position) {
@@ -267,7 +270,7 @@ router.post('/:id/trade', (req, res) => {
     db.run(`
       INSERT INTO positions (id, agent_id, market_id, yes_shares, no_shares, total_cost)
       VALUES (?, ?, ?, ?, ?, ?)
-    `, [uuidv4(), agent_id, market.id, outcome === 'yes' ? shares : 0, outcome === 'no' ? shares : 0, amount]);
+    `, [uuidv4(), agent_id_resolved, market.id, outcome === 'yes' ? shares : 0, outcome === 'no' ? shares : 0, amount]);
   }
   
   // 4. Record trade
@@ -275,7 +278,7 @@ router.post('/:id/trade', (req, res) => {
   db.run(`
     INSERT INTO trades (id, agent_id, market_id, outcome, amount, shares, price, fee, comment)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `, [tradeId, agent_id, market.id, outcome, amount, shares, avgPrice, fee, comment || null]);
+  `, [tradeId, agent_id_resolved, market.id, outcome, amount, shares, avgPrice, fee, comment || null]);
   
   // Get updated state
   const updatedMarket = db.get('SELECT * FROM markets WHERE id = ?', [market.id]);
@@ -287,14 +290,14 @@ router.post('/:id/trade', (req, res) => {
   
   const updatedPosition = db.get(
     'SELECT * FROM positions WHERE agent_id = ? AND market_id = ?',
-    [agent_id, market.id]
+    [agent_id_resolved, market.id]
   );
   
   // Update streak and check achievements
-  const streak = engagement().updateStreak(agent_id);
-  const newAchievements = engagement().checkAchievements(agent_id);
+  const streak = engagement().updateStreak(agent_id_resolved);
+  const newAchievements = engagement().checkAchievements(agent_id_resolved);
   
-  const updatedAgent = db.get('SELECT balance FROM agents WHERE id = ?', [agent_id]);
+  const updatedAgent = db.get('SELECT balance FROM agents WHERE id = ?', [agent_id_resolved]);
   
   res.json({
     trade: {
@@ -322,15 +325,23 @@ router.post('/:id/trade', (req, res) => {
  * Body: { agent_id, outcome: 'yes'|'no', shares }
  */
 router.post('/:id/sell', (req, res) => {
-  const { agent_id, outcome, shares } = req.body;
+  const { agent_id, handle, outcome, shares } = req.body;
+  const agentRef = agent_id || handle;
   
-  if (!agent_id || !outcome || !shares) {
-    return res.status(400).json({ error: 'agent_id, outcome, and shares required' });
+  if (!agentRef || !outcome || !shares) {
+    return res.status(400).json({ error: 'agent_id (or handle), outcome, and shares required' });
   }
   
   if (!['yes', 'no'].includes(outcome)) {
     return res.status(400).json({ error: 'Outcome must be yes or no' });
   }
+  
+  // Resolve agent (accepts UUID or handle)
+  const agent = db.resolveAgent(agentRef);
+  if (!agent) {
+    return res.status(404).json({ error: 'Agent not found' });
+  }
+  const agent_id_resolved = agent.id;
   
   // Get market
   const market = db.get('SELECT * FROM markets WHERE id = ?', [req.params.id]);
@@ -345,7 +356,7 @@ router.post('/:id/sell', (req, res) => {
   // Get position
   const position = db.get(
     'SELECT * FROM positions WHERE agent_id = ? AND market_id = ?',
-    [agent_id, market.id]
+    [agent_id_resolved, market.id]
   );
   
   if (!position) {
@@ -368,7 +379,7 @@ router.post('/:id/sell', (req, res) => {
   // Execute sale
   // 1. Add to agent balance
   db.run('UPDATE agents SET balance = balance + ?, last_active = CURRENT_TIMESTAMP WHERE id = ?',
-    [amount, agent_id]);
+    [amount, agent_id_resolved]);
   
   // 2. Update market AMM
   db.run('UPDATE markets SET yes_shares = ?, no_shares = ?, volume = volume + ? WHERE id = ?',
@@ -386,15 +397,15 @@ router.post('/:id/sell', (req, res) => {
   db.run(`
     INSERT INTO trades (id, agent_id, market_id, outcome, amount, shares, price, fee)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `, [tradeId, agent_id, market.id, outcome, -amount, -shares, avgPrice, fee]);
+  `, [tradeId, agent_id_resolved, market.id, outcome, -amount, -shares, avgPrice, fee]);
   
   // Get updated state
   const updatedMarket = db.get('SELECT * FROM markets WHERE id = ?', [market.id]);
   const updatedPosition = db.get(
     'SELECT * FROM positions WHERE agent_id = ? AND market_id = ?',
-    [agent_id, market.id]
+    [agent_id_resolved, market.id]
   );
-  const updatedAgent = db.get('SELECT balance FROM agents WHERE id = ?', [agent_id]);
+  const updatedAgent = db.get('SELECT balance FROM agents WHERE id = ?', [agent_id_resolved]);
   
   res.json({
     trade: {
@@ -423,11 +434,17 @@ router.post('/:id/resolve', (req, res) => {
   const { resolver_id, resolution, source, evidence } = req.body;
   
   if (!resolver_id || !resolution) {
-    return res.status(400).json({ error: 'resolver_id and resolution required' });
+    return res.status(400).json({ error: 'resolver_id (UUID or handle) and resolution required' });
   }
   
   if (!['yes', 'no'].includes(resolution)) {
     return res.status(400).json({ error: 'Resolution must be yes or no' });
+  }
+  
+  // Resolve agent (accepts UUID or handle)
+  const resolver = db.resolveAgent(resolver_id);
+  if (!resolver) {
+    return res.status(404).json({ error: 'Resolver agent not found' });
   }
   
   // Get market
@@ -441,7 +458,7 @@ router.post('/:id/resolve', (req, res) => {
   }
   
   // Only creator can resolve (for MVP)
-  if (market.creator_id !== resolver_id) {
+  if (market.creator_id !== resolver.id) {
     return res.status(403).json({ error: 'Only market creator can resolve' });
   }
   
@@ -510,10 +527,11 @@ router.post('/:id/resolve', (req, res) => {
  * Body: { agent_id, text }
  */
 router.post('/:id/comment', (req, res) => {
-  const { agent_id, text } = req.body;
+  const { agent_id, handle, text } = req.body;
+  const agentRef = agent_id || handle;
   
-  if (!agent_id || !text) {
-    return res.status(400).json({ error: 'agent_id and text required' });
+  if (!agentRef || !text) {
+    return res.status(400).json({ error: 'agent_id (or handle) and text required' });
   }
   
   if (text.length > 500) {
@@ -523,17 +541,18 @@ router.post('/:id/comment', (req, res) => {
   const market = db.get('SELECT id FROM markets WHERE id = ?', [req.params.id]);
   if (!market) return res.status(404).json({ error: 'Market not found' });
   
-  const agent = db.get('SELECT id, handle, avatar FROM agents WHERE id = ?', [agent_id]);
+  // Resolve agent (accepts UUID or handle)
+  const agent = db.resolveAgent(agentRef);
   if (!agent) return res.status(404).json({ error: 'Agent not found' });
   
   const id = uuidv4();
   db.run('INSERT INTO comments (id, market_id, agent_id, text) VALUES (?, ?, ?, ?)',
-    [id, market.id, agent_id, text]);
+    [id, market.id, agent.id, text]);
   
   const comment = db.get('SELECT * FROM comments WHERE id = ?', [id]);
   
   // Check achievements for comments
-  const newAch = engagement().checkAchievements(agent_id);
+  const newAch = engagement().checkAchievements(agent.id);
   
   res.status(201).json({
     comment: { ...comment, handle: agent.handle, avatar: agent.avatar },
