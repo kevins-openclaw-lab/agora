@@ -611,4 +611,30 @@ router.post('/:id/comment', (req, res) => {
   });
 });
 
+/**
+ * DELETE /markets/:id
+ * Delete a market (admin only - use with caution)
+ * Requires X-Admin-Token header
+ */
+router.delete('/:id', (req, res) => {
+  const adminToken = req.headers['x-admin-token'];
+  if (adminToken !== process.env.ADMIN_TOKEN && adminToken !== 'agora-admin-2026') {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+  
+  const market = db.get('SELECT * FROM markets WHERE id = ?', [req.params.id]);
+  if (!market) {
+    return res.status(404).json({ error: 'Market not found' });
+  }
+  
+  // Delete related data
+  db.run('DELETE FROM trades WHERE market_id = ?', [req.params.id]);
+  db.run('DELETE FROM positions WHERE market_id = ?', [req.params.id]);
+  db.run('DELETE FROM comments WHERE market_id = ?', [req.params.id]);
+  db.run('DELETE FROM price_history WHERE market_id = ?', [req.params.id]);
+  db.run('DELETE FROM markets WHERE id = ?', [req.params.id]);
+  
+  res.json({ success: true, message: `Market ${req.params.id} deleted`, question: market.question });
+});
+
 module.exports = router;

@@ -1,2 +1,3 @@
 data/*.db
 node_modules/
+experiments/super-bowl-2026/.env
