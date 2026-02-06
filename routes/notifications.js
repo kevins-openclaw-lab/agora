@@ -122,6 +122,61 @@ router.delete('/webhooks', (req, res) => {
 });
 
 /**
+ * Update webhook preferences (opt out of specific events)
+ * PATCH /api/notifications/webhooks
+ */
+router.patch('/webhooks', (req, res) => {
+  const { handle, agent_id, url, events, disable } = req.body;
+  
+  const agentIdOrHandle = handle || agent_id;
+  if (!agentIdOrHandle) {
+    return res.status(400).json({ error: 'handle or agent_id required' });
+  }
+  
+  const agent = resolveAgent(agentIdOrHandle);
+  if (!agent) {
+    return res.status(404).json({ error: 'Agent not found' });
+  }
+  
+  if (!url) {
+    return res.status(400).json({ error: 'url is required' });
+  }
+  
+  // Get current webhook
+  const webhooks = notifications.getWebhooks(agent.id);
+  const webhook = webhooks.find(w => w.url === url);
+  if (!webhook) {
+    return res.status(404).json({ error: 'Webhook not found. Register first.' });
+  }
+  
+  // Handle disable array (opt-out of specific events)
+  let newEvents = events;
+  if (disable && Array.isArray(disable)) {
+    // Start with all events, remove disabled ones
+    newEvents = notifications.EVENT_TYPES.filter(e => !disable.includes(e));
+  }
+  
+  if (!newEvents || newEvents.length === 0) {
+    return res.status(400).json({ 
+      error: 'Must subscribe to at least one event type',
+      hint: 'Use DELETE to remove webhook entirely'
+    });
+  }
+  
+  try {
+    const result = notifications.registerWebhook(agent.id, url, webhook.secret, newEvents);
+    res.json({
+      success: true,
+      message: 'Webhook preferences updated',
+      subscribed_events: result.events,
+      available_events: notifications.EVENT_TYPES
+    });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+/**
  * Get notification history
  * GET /api/notifications/:handle
  */

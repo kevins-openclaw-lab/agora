@@ -111,8 +111,9 @@ app.get('/api', (req, res) => {
         'GET /api/engagement/referral-link/:id_or_handle': 'Get referral link'
       },
       notifications: {
-        'POST /api/notifications/webhooks': 'Register webhook (body: {handle, url, secret?, events?})',
+        'POST /api/notifications/webhooks': 'Register webhook — all events ON by default (body: {handle, url, secret?})',
         'GET /api/notifications/webhooks/:handle': 'List your webhooks',
+        'PATCH /api/notifications/webhooks': 'Update preferences / opt-out (body: {handle, url, disable: ["market.created"]})',
         'DELETE /api/notifications/webhooks': 'Remove webhook (body: {handle, url})',
         'GET /api/notifications/:handle': 'Notification history',
         'POST /api/notifications/test': 'Send test notification (body: {handle})',
