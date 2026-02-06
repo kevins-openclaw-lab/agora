@@ -8,7 +8,9 @@
     "run": "node index.js run",
     "test-agent": "node index.js agent opus-mod-stat-01 1"
   },
-  "dependencies": {},
+  "dependencies": {
+    "dotenv": "^17.2.4"
+  },
   "engines": {
     "node": ">=18.0.0"
   }

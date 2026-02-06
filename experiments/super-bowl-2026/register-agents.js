@@ -1,120 +1,73 @@
 #!/usr/bin/env node
 /**
- * Register all 80 experiment agents and credit them with extra AGP
- * 
- * Usage: node register-agents.js
- * 
- * Requires:
- * - AGORA_URL env var (default: https://agoramarket.ai)
+ * Register all 80 experiment agents on Agora
  */
 
-const agentConfigs = require('./agents/agent-configs.json');
+const fs = require('fs');
+const path = require('path');
 
-const AGORA_URL = process.env.AGORA_URL || 'https://agoramarket.ai';
-const ADMIN_TOKEN = 'agora-admin-2026';
-const EXTRA_AGP = 1500; // +1500 to reach 2500 total (default is 1000)
-
-async function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+const API_BASE = 'https://agoramarket.ai/api';
+const configs = JSON.parse(fs.readFileSync(path.join(__dirname, 'agents/agent-configs.json'), 'utf8'));
 
 async function registerAgent(agent) {
+  const handle = `exp_${agent.id}`;  // underscore, not hyphen
+  const description = `${agent.emoji} ${agent.name} | ${agent.model} | ${agent.risk} ${agent.orientation}`;
+  
   try {
-    const response = await fetch(`${AGORA_URL}/api/agents/register`, {
+    const res = await fetch(`${API_BASE}/agents/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        handle: agent.id,
-        bio: `${agent.emoji} ${agent.name} | ${agent.risk} ${agent.orientation} | ${agent.model} | 🧪 Super Bowl LX Experiment`
+        handle,
+        name: agent.name,
+        description,
+        avatar: agent.emoji,
+        model: agent.model
       })
     });
     
-    const data = await response.json();
-    
-    if (data.error) {
-      console.log(`  ⚠️ ${agent.id}: ${data.error}`);
-      return { success: false, error: data.error };
+    if (!res.ok) {
+      const err = await res.json();
+      if (err.error?.includes('already exists')) {
+        console.log(`⏭️  ${handle} already exists`);
+        return { handle, status: 'exists' };
+      }
+      console.error(`❌ ${handle}: ${err.error}`);
+      return { handle, status: 'error', error: err.error };
     }
     
-    return { success: true, created: data.created, balance: data.agent?.balance };
+    const data = await res.json();
+    console.log(`✅ ${handle} registered (${data.agent?.id})`);
+    return { handle, status: 'created', id: data.agent?.id };
   } catch (e) {
-    console.log(`  ❌ ${agent.id}: ${e.message}`);
-    return { success: false, error: e.message };
-  }
-}
-
-async function creditAgent(agentId, amount) {
-  try {
-    const response = await fetch(`${AGORA_URL}/api/agents/${agentId}/credit`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Admin-Token': ADMIN_TOKEN
-      },
-      body: JSON.stringify({ amount })
-    });
-    
-    const data = await response.json();
-    return data;
-  } catch (e) {
-    return { success: false, error: e.message };
+    console.error(`❌ ${handle}: ${e.message}`);
+    return { handle, status: 'error', error: e.message };
   }
 }
 
 async function main() {
-  const agents = agentConfigs.agents;
+  console.log(`\n🚀 Registering ${configs.agents.length} agents...\n`);
   
-  console.log('🏈 Super Bowl LX Experiment - Agent Registration');
-  console.log('================================================');
-  console.log(`Registering ${agents.length} agents...`);
-  console.log(`Each will receive ${1000 + EXTRA_AGP} AGP total`);
-  console.log('');
+  const results = { created: 0, exists: 0, error: 0 };
+  const agentIds = {};
   
-  let registered = 0;
-  let credited = 0;
-  let errors = 0;
-  
-  // Group by model for display
-  const byModel = {};
-  for (const agent of agents) {
-    if (!byModel[agent.model]) byModel[agent.model] = [];
-    byModel[agent.model].push(agent);
-  }
-  
-  for (const [model, modelAgents] of Object.entries(byModel)) {
-    console.log(`\n📦 ${model} (${modelAgents.length} agents):`);
+  for (const agent of configs.agents) {
+    const result = await registerAgent(agent);
+    results[result.status]++;
+    if (result.id) agentIds[agent.id] = result.id;
     
-    for (const agent of modelAgents) {
-      // Register
-      const regResult = await registerAgent(agent);
-      if (regResult.success) {
-        registered++;
-        process.stdout.write(`  ✅ ${agent.id}`);
-        
-        // Credit extra AGP
-        const creditResult = await creditAgent(agent.id, EXTRA_AGP);
-        if (creditResult.success) {
-          credited++;
-          console.log(` → ${creditResult.new_balance} AGP`);
-        } else {
-          console.log(` (credit failed: ${creditResult.error})`);
-        }
-      } else {
-        errors++;
-      }
-      
-      await sleep(1000); // Rate limiting (1 second between agents)
-    }
+    // Delay to avoid rate limiting (1.5s between calls)
+    await new Promise(r => setTimeout(r, 1500));
   }
   
-  console.log('\n================================================');
-  console.log(`✅ Registered: ${registered}/${agents.length}`);
-  console.log(`💰 Credited: ${credited}/${agents.length}`);
-  console.log(`❌ Errors: ${errors}`);
+  console.log(`\n📊 Results: ${results.created} created, ${results.exists} already existed, ${results.error} errors`);
   
-  if (errors === 0) {
-    console.log('\n🎉 All agents ready for experiment!');
-  }
+  // Save agent ID mapping for orchestrator
+  fs.writeFileSync(
+    path.join(__dirname, 'agents/registered-agents.json'),
+    JSON.stringify(agentIds, null, 2)
+  );
+  console.log(`\n💾 Saved ${Object.keys(agentIds).length} agent IDs to agents/registered-agents.json`);
 }
 
 main().catch(console.error);

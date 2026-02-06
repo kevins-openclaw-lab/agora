@@ -85,7 +85,8 @@ async function getMarketState() {
   try {
     const response = await fetch(`${AGORA_URL}/api/markets/${MARKET_ID}`);
     if (!response.ok) throw new Error(`Market fetch failed: ${response.status}`);
-    return await response.json();
+    const data = await response.json();
+    return data.market || data;  // Handle nested response
   } catch (e) {
     console.error('Failed to get market state:', e.message);
     return null;
