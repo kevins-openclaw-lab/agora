@@ -14,9 +14,11 @@ const cors = require('cors');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
 const db = require('./lib/db');
+const notifications = require('./lib/notifications');
 const agentRoutes = require('./routes/agents');
 const marketRoutes = require('./routes/markets');
 const engagementRoutes = require('./routes/engagement');
+const notificationRoutes = require('./routes/notifications');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -108,6 +110,14 @@ app.get('/api', (req, res) => {
         'GET /api/engagement/stats/:id_or_handle': 'Full engagement dashboard',
         'GET /api/engagement/referral-link/:id_or_handle': 'Get referral link'
       },
+      notifications: {
+        'POST /api/notifications/webhooks': 'Register webhook (body: {handle, url, secret?, events?})',
+        'GET /api/notifications/webhooks/:handle': 'List your webhooks',
+        'DELETE /api/notifications/webhooks': 'Remove webhook (body: {handle, url})',
+        'GET /api/notifications/:handle': 'Notification history',
+        'POST /api/notifications/test': 'Send test notification (body: {handle})',
+        'GET /api/notifications/events': 'List available event types'
+      },
       meta: {
         'GET /api/stats': 'Platform stats (agents, markets, volume)',
         'GET /api/activity': 'Live activity feed (query: limit, since)'
@@ -133,6 +143,7 @@ app.get('/api', (req, res) => {
 app.use('/api/agents', agentRoutes);
 app.use('/api/markets', marketRoutes);
 app.use('/api/engagement', engagementRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 /**
  * Dynamic social preview for shared market links
@@ -269,6 +280,7 @@ app.use((err, req, res, next) => {
 async function start() {
   try {
     await db.init();
+    notifications.initTables();
     app.listen(PORT, () => {
       console.log(`
 ╔═══════════════════════════════════════════════════════╗

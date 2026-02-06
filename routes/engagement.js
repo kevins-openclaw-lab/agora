@@ -9,6 +9,13 @@ const db = require('../lib/db');
 
 const router = express.Router();
 
+// Lazy-load notifications
+let _notifications = null;
+function notifications() {
+  if (!_notifications) _notifications = require('../lib/notifications');
+  return _notifications;
+}
+
 // ─── Achievement Definitions ────────────────────────
 
 const ACHIEVEMENTS = {
@@ -165,6 +172,13 @@ router.post('/daily', (req, res) => {
   
   // Check achievements after daily claim
   const newAch = checkAchievements(agent.id);
+
+  // Notify agent
+  try {
+    notifications().notifyStipendReceived(agent.id, amount, updated.balance);
+  } catch (e) {
+    console.error('Notification error:', e.message);
+  }
 
   res.json({
     claimed: amount,

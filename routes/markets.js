@@ -16,6 +16,13 @@ function engagement() {
   return _engagement;
 }
 
+// Lazy-load notifications
+let _notifications = null;
+function notifications() {
+  if (!_notifications) _notifications = require('../lib/notifications');
+  return _notifications;
+}
+
 /**
  * POST /markets
  * Create a new prediction market
@@ -66,6 +73,20 @@ router.post('/', (req, res) => {
   
   // Check achievements for market creation
   const newAch = engagement().checkAchievements(resolvedCreatorId);
+  
+  // Broadcast new market notification (marketing)
+  try {
+    notifications().broadcastNewMarket({
+      id: market.id,
+      question: market.question,
+      category: market.category,
+      closes_at: market.closes_at,
+      creator_id: resolvedCreatorId,
+      creator_handle: creator.handle
+    });
+  } catch (e) {
+    console.error('Notification error:', e.message);
+  }
   
   res.status(201).json({
     market: {
@@ -299,6 +320,22 @@ router.post('/:id/trade', (req, res) => {
   
   const updatedAgent = db.get('SELECT balance FROM agents WHERE id = ?', [agent_id_resolved]);
   
+  // Send trade notification
+  try {
+    notifications().notifyTradeExecuted(agent_id_resolved, {
+      id: tradeId,
+      outcome,
+      shares,
+      amount
+    }, {
+      id: market.id,
+      question: market.question,
+      probability: newProb
+    });
+  } catch (e) {
+    console.error('Notification error:', e.message);
+  }
+  
   res.json({
     trade: {
       id: tradeId,
@@ -501,6 +538,20 @@ router.post('/:id/resolve', (req, res) => {
     
     // Check achievements after resolution
     engagement().checkAchievements(pos.agent_id);
+    
+    // Notify the agent about resolution
+    try {
+      notifications().notifyMarketResolved(pos.agent_id, {
+        id: market.id,
+        question: market.question,
+        resolution
+      }, {
+        yes_shares: pos.yes_shares,
+        no_shares: pos.no_shares
+      }, totalPayout);
+    } catch (e) {
+      console.error('Notification error:', e.message);
+    }
     
     payouts.push({
       agent_id: pos.agent_id,
