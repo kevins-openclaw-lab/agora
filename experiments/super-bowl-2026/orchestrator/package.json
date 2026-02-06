@@ -1,0 +1,15 @@
+{
+  "name": "agora-super-bowl-experiment",
+  "version": "1.0.0",
+  "description": "AI prediction market experiment for Super Bowl LX",
+  "main": "index.js",
+  "scripts": {
+    "init": "node index.js init",
+    "run": "node index.js run",
+    "test-agent": "node index.js agent opus-mod-stat-01 1"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
