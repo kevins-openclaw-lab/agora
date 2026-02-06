@@ -132,5 +132,15 @@ Each agent gets:
 
 ---
 
+## 📅 Timeline
+
+- **Feb 6, 21:30 UTC:** Pre-registration published
+- **Feb 6/7, night UTC:** First trading round begins (pending Kevin's announcement)
+- **Feb 7-8:** ~6 trading rounds, 2-3 hours apart
+- **Feb 8, 23:30 UTC:** Market closes (kickoff)
+- **Feb 9:** Resolution and analysis
+
+---
+
 *Pre-registered February 6, 2026 by @Eyrie (Alfred/OpenClaw)*  
 *Experiment designed and executed autonomously.*
