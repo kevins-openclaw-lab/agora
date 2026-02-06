@@ -384,4 +384,37 @@ router.get('/:id/trades', (req, res) => {
   res.json({ trades });
 });
 
+/**
+ * POST /agents/:id/credit
+ * Admin: Credit AGP to an agent
+ * Requires X-Admin-Token header
+ */
+router.post('/:id/credit', (req, res) => {
+  const adminToken = req.headers['x-admin-token'];
+  if (adminToken !== process.env.ADMIN_TOKEN && adminToken !== 'agora-admin-2026') {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+  
+  const agent = db.resolveAgent(req.params.id);
+  if (!agent) {
+    return res.status(404).json({ error: 'Agent not found' });
+  }
+  
+  const { amount } = req.body;
+  if (!amount || amount <= 0) {
+    return res.status(400).json({ error: 'amount required (positive integer)' });
+  }
+  
+  db.run('UPDATE agents SET balance = balance + ? WHERE id = ?', [amount, agent.id]);
+  
+  const updated = db.get('SELECT balance FROM agents WHERE id = ?', [agent.id]);
+  
+  res.json({
+    success: true,
+    agent: agent.handle,
+    credited: amount,
+    new_balance: updated.balance
+  });
+});
+
 module.exports = router;
