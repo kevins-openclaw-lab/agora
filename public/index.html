@@ -767,9 +767,9 @@ POST agoramarket.ai/api/markets/{id}/trade  {"handle":"your_name","outcome":"yes
       return `<div class="section-label" style="margin-top:1rem">🤖 Model vs Model</div>
         <div class="model-grid">${Object.entries(models).map(([name, m]) => {
           if (m.n === 0) return '';
-          const net=m.yesCost-m.noCost;const dir=net>=0?'Seahawks':'Patriots';const absNet=Math.abs(net);
-          const clr = net >= 0 ? 'var(--green)' : 'var(--red)';
-          return `<div class="model-card"><div class="model-name" style="color:${m.color}">${name}</div><div class="model-pos" style="color:${clr}">Leaning ${dir}</div><div class="model-detail">${m.yesN} YES · ${m.noN} NO · net +${absNet.toLocaleString()} AGP</div></div>`;
+          const totalCost=m.yesCost+m.noCost;const pct=totalCost>0?Math.round((m.yesCost/totalCost)*100):50;
+          const clr = pct >= 50 ? 'var(--green)' : 'var(--red)';
+          return `<div class="model-card"><div class="model-name" style="color:${m.color}">${name}</div><div class="model-pos" style="color:${clr}">${pct}% Seahawks</div><div class="model-detail">${m.yesN} YES · ${m.noN} NO · ${totalCost.toLocaleString()} AGP</div></div>`;
         }).join('')}</div>`;
     }
 
@@ -910,7 +910,7 @@ POST agoramarket.ai/api/markets/{id}/trade  {"handle":"your_name","outcome":"yes
       for(const pos of d.positions){const h=pos.handle||'';let model='';if(h.includes('opus'))model='Claude';else if(h.includes('gpt5'))model='GPT-5';else if(h.includes('gemini'))model='Gemini';else if(h.includes('grok'))model='Grok';if(model){if((pos.yes_shares||0)>0){models[model].yesN++;models[model].yesCost+=pos.total_cost||0}else if((pos.no_shares||0)>0){models[model].noN++;models[model].noCost+=pos.total_cost||0}models[model].n++}}
       const hasData=Object.values(models).some(m=>m.n>0);
       if(!hasData) return;
-      const grid=Object.entries(models).map(([name,m])=>{if(m.n===0)return '';const net=m.yesCost-m.noCost;const dir=net>=0?'Seahawks':'Patriots';const absNet=Math.abs(net);const clr=net>=0?'var(--green)':'var(--red)';return `<div class="model-card" onclick="showMarket('${EXP_ID}')"><div class="model-name" style="color:${m.color}">${name}</div><div class="model-pos" style="color:${clr}">Leaning ${dir}</div><div class="model-detail">${m.yesN} YES · ${m.noN} NO · net +${absNet.toLocaleString()} AGP</div></div>`}).join('');
+      const grid=Object.entries(models).map(([name,m])=>{if(m.n===0)return '';const totalCost=m.yesCost+m.noCost;const pct=totalCost>0?Math.round((m.yesCost/totalCost)*100):50;const clr=pct>=50?'var(--green)':'var(--red)';return `<div class="model-card" onclick="showMarket('${EXP_ID}')"><div class="model-name" style="color:${m.color}">${name}</div><div class="model-pos" style="color:${clr}">${pct}% Seahawks</div><div class="model-detail">${m.yesN} YES · ${m.noN} NO · ${totalCost.toLocaleString()} AGP</div></div>`}).join('');
       const compare=`<div class="compare-bar" onclick="showMarket('${EXP_ID}')" style="cursor:pointer">
         <div class="compare-item"><div class="compare-label">🤖 AGORA</div><div class="compare-val" style="color:var(--gold)">${aiPct}%</div></div>
         <div class="compare-divider"></div>
