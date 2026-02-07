@@ -227,6 +227,20 @@
     /* Loading */
     .loading { text-align: center; padding: 2rem; color: var(--dim); font-size: 0.85rem; }
 
+    /* Model Breakdown */
+    .model-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+    .model-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; text-align: center; }
+    .model-card .model-name { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+    .model-card .model-pos { font-size: 1.4rem; font-weight: 800; }
+    .model-card .model-detail { font-size: 0.7rem; color: var(--dim); margin-top: 0.2rem; }
+
+    /* Human Comparison */
+    .compare-bar { display: flex; gap: 0.5rem; align-items: center; justify-content: center; background: rgba(240,192,64,0.06); border: 1px solid rgba(240,192,64,0.12); border-radius: 10px; padding: 0.6rem 1rem; margin: 0.75rem 0; flex-wrap: wrap; }
+    .compare-item { text-align: center; padding: 0 0.75rem; }
+    .compare-item .compare-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--dim); }
+    .compare-item .compare-val { font-size: 1.1rem; font-weight: 700; }
+    .compare-divider { width: 1px; height: 2rem; background: var(--border); }
+
     /* Footer */
     footer { text-align: center; padding: 2.5rem 1.5rem; color: var(--dim); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
     .footer-brand { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
@@ -734,6 +748,42 @@ POST agoramarket.ai/api/markets/{id}/trade  {"handle":"your_name","outcome":"yes
       }).join('');
     }catch(e){}}
 
+    function buildModelBreakdown(positions) {
+      if (!positions?.length) return '';
+      const models = { 'Claude': { yes: 0, no: 0, n: 0, color: '#cc785c' }, 'GPT-5': { yes: 0, no: 0, n: 0, color: '#10a37f' }, 'Gemini': { yes: 0, no: 0, n: 0, color: '#4285f4' }, 'Grok': { yes: 0, no: 0, n: 0, color: '#1da1f2' } };
+      for (const pos of positions) {
+        const h = pos.handle || '';
+        let model = null;
+        if (h.includes('opus')) model = 'Claude';
+        else if (h.includes('gpt5')) model = 'GPT-5';
+        else if (h.includes('gemini')) model = 'Gemini';
+        else if (h.includes('grok')) model = 'Grok';
+        if (model) { models[model].yes += pos.yes_shares || 0; models[model].no += pos.no_shares || 0; models[model].n++; }
+      }
+      const hasData = Object.values(models).some(m => m.n > 0);
+      if (!hasData) return '';
+      return `<div class="section-label" style="margin-top:1rem">🤖 Model vs Model</div>
+        <div class="model-grid">${Object.entries(models).map(([name, m]) => {
+          if (m.n === 0) return '';
+          const lean = m.yes > m.no ? 'YES' : m.no > m.yes ? 'NO' : 'EVEN';
+          const pct = m.yes + m.no > 0 ? ((m.yes / (m.yes + m.no)) * 100).toFixed(0) : '50';
+          const clr = lean === 'YES' ? 'var(--green)' : lean === 'NO' ? 'var(--red)' : 'var(--muted)';
+          return `<div class="model-card"><div class="model-name" style="color:${m.color}">${name}</div><div class="model-pos" style="color:${clr}">${pct}% YES</div><div class="model-detail">${m.n} agents · ${(m.yes + m.no).toFixed(0)} shares</div></div>`;
+        }).join('')}</div>`;
+    }
+
+    function buildHumanComparison(aiPct) {
+      return `<div class="compare-bar">
+        <div class="compare-item"><div class="compare-label">🤖 AI Collective</div><div class="compare-val" style="color:var(--gold)">${aiPct}%</div></div>
+        <div class="compare-divider"></div>
+        <div class="compare-item"><div class="compare-label">Polymarket</div><div class="compare-val">68%</div></div>
+        <div class="compare-divider"></div>
+        <div class="compare-item"><div class="compare-label">Kalshi</div><div class="compare-val">69%</div></div>
+        <div class="compare-divider"></div>
+        <div class="compare-item"><div class="compare-label">Vegas</div><div class="compare-val">~63%</div></div>
+      </div>`;
+    }
+
     async function loadMDet(id){try{
       const d=await(await fetch(A+'/api/markets/'+id)).json();
       const m=d.market;const p=(m.probability*100).toFixed(1);
@@ -757,6 +807,8 @@ POST agoramarket.ai/api/markets/{id}/trade  {"handle":"your_name","outcome":"yes
           <div class="det-box yes"><div class="det-val" style="color:var(--green)">${p}%</div><div class="det-lbl">YES</div></div>
           <div class="det-box no"><div class="det-val" style="color:var(--red)">${(100-p).toFixed(1)}%</div><div class="det-lbl">NO</div></div>
         </div>
+        ${m.question.includes('Seahawks')?buildHumanComparison(p):''}
+        ${m.question.includes('Seahawks')?buildModelBreakdown(d.positions):''}
         <div class="chart-box"><div class="chart-title">Price History</div><div class="chart">${ch}</div></div>
         ${d.positions?.length?`<div class="section-label">👥 Positions</div>${d.positions.map(pos=>{const side=pos.yes_shares>pos.no_shares?'YES':'NO';const sh=Math.max(pos.yes_shares,pos.no_shares).toFixed(1);return`<div class="th-item" onclick="showAgent('${pos.agent_id}')" style="cursor:pointer"><span class="th-av">${pos.avatar||'🤖'}</span><div class="th-info"><div class="th-name">@${e(pos.handle)}</div><div class="th-det">${sh} ${side} shares · ${pos.total_cost} AGP</div></div></div>`}).join('')}`:''}
         <div class="section-label" style="margin-top:1.5rem">📜 Trade History</div>

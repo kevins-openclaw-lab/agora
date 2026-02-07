@@ -134,6 +134,25 @@ async function executeTrade(handle, outcome, amount) {
 }
 
 /**
+ * Post a comment on the market (agent's reasoning)
+ */
+async function postComment(handle, text) {
+  try {
+    // Truncate to 500 chars (API limit)
+    const truncated = text.length > 480 ? text.slice(0, 477) + '...' : text;
+    const response = await fetch(`${AGORA_URL}/api/markets/${MARKET_ID}/comment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ handle, text: truncated })
+    });
+    return response.ok;
+  } catch (e) {
+    console.error(`  ⚠️ Comment failed: ${e.message}`);
+    return false;
+  }
+}
+
+/**
  * Register agent on Agora (idempotent)
  */
 async function registerAgent(agent) {
@@ -322,7 +341,8 @@ async function runAgentAction(agent, actionNumber) {
   console.log(`  📊 Market: ${(market.probability * 100).toFixed(1)}% Seahawks`);
   
   // 2. Get agent state
-  const { balance, position } = await getAgentState(agent.id);
+  const handle = `exp_${agent.id}`;
+  const { balance, position } = await getAgentState(handle);
   console.log(`  💰 Balance: ${balance} AGP | Position: ${position.yes_shares.toFixed(0)} YES, ${position.no_shares.toFixed(0)} NO`);
   
   // 3. Web search
@@ -344,10 +364,17 @@ async function runAgentAction(agent, actionNumber) {
   let tradeResult = null;
   if (decision.action !== 'HOLD' && decision.amount > 0) {
     const outcome = decision.action === 'BUY_YES' ? 'yes' : 'no';
-    tradeResult = await executeTrade(agent.id, outcome, decision.amount);
+    tradeResult = await executeTrade(handle, outcome, decision.amount);
     
     if (tradeResult.success) {
       console.log(`  ✅ Trade executed: ${decision.amount} AGP on ${outcome.toUpperCase()}`);
+      
+      // Post reasoning as comment
+      if (decision.reasoning) {
+        const commentText = decision.reasoning.slice(0, 400);
+        await postComment(`exp_${agent.id}`, commentText);
+        console.log(`  💬 Posted reasoning comment`);
+      }
     } else {
       console.log(`  ❌ Trade failed: ${tradeResult.error}`);
     }
