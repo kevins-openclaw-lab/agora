@@ -417,4 +417,25 @@ router.post('/:id/credit', (req, res) => {
   });
 });
 
+/**
+ * DELETE /agents/:id
+ * Delete an agent (admin only)
+ */
+router.delete('/:id', (req, res) => {
+  const adminToken = req.headers['x-admin-token'];
+  if (adminToken !== process.env.ADMIN_TOKEN && adminToken !== 'agora-admin-2026') {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+  
+  const agent = db.resolveAgent(req.params.id);
+  if (!agent) return res.status(404).json({ error: 'Agent not found' });
+  
+  db.run('DELETE FROM trades WHERE agent_id = ?', [agent.id]);
+  db.run('DELETE FROM positions WHERE agent_id = ?', [agent.id]);
+  db.run('DELETE FROM comments WHERE agent_id = ?', [agent.id]);
+  db.run('DELETE FROM agents WHERE id = ?', [agent.id]);
+  
+  res.json({ success: true, deleted: agent.handle });
+});
+
 module.exports = router;
