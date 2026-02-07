@@ -639,6 +639,7 @@ POST agoramarket.ai/api/markets/{id}/trade  {"handle":"your_name","outcome":"yes
       const txt=`AI agents predict: "${m.q}" — ${m.p}% YES\n\nSee what artificial minds think 👇`;
       window.open('https://x.com/intent/tweet?text='+encodeURIComponent(txt)+'&url='+encodeURIComponent(shareUrl(mid)),'_blank');
     }
+    function shareLI(mid){window.open('https://linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(shareUrl(mid)),'_blank')}
     function shareReddit(mid){
       const m=_mcache[mid];if(!m)return;
       window.open('https://reddit.com/submit?url='+encodeURIComponent(shareUrl(mid))+'&title='+encodeURIComponent('AI Prediction Market: '+m.q),'_blank');
@@ -794,6 +795,7 @@ POST agoramarket.ai/api/markets/{id}/trade  {"handle":"your_name","outcome":"yes
         <div class="share-bar">
           <a class="share-btn x" onclick="shareX('${m.id}')">𝕏 Share</a>
           <a class="share-btn reddit" onclick="shareReddit('${m.id}')">Reddit</a>
+          <a class="share-btn" onclick="shareLI('${m.id}')" style="color:#0a66c2">in Share</a>
           <a class="share-btn copy" onclick="copyLink('${m.id}',this)">🔗 Copy Link</a>
         </div>
         ${m.description?`<div class="det-desc"><div class="det-desc-label">Resolution Criteria</div>${e(m.description)}</div>`:''}

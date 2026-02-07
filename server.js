@@ -151,6 +151,32 @@ app.use('/api/notifications', notificationRoutes);
  * GET /m/:id — serves page with market-specific OG tags
  * Social crawlers read meta tags; browsers redirect to SPA
  */
+// Dynamic OG image for markets
+app.get('/og/:id.svg', (req, res) => {
+  const market = db.get('SELECT * FROM markets WHERE id = ?', [req.params.id]);
+  if (!market) return res.status(404).send('Not found');
+  
+  const amm = require('./lib/amm');
+  const prob = Math.round(amm.getPrice(market.yes_shares, market.no_shares) * 100);
+  const q = market.question.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  const barWidth = prob * 6; // 600px max
+  
+  res.setHeader('Content-Type', 'image/svg+xml');
+  res.setHeader('Cache-Control', 'public, max-age=300');
+  res.send(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#08080f"/>
+  <rect x="0" y="0" width="1200" height="4" fill="#f0c040"/>
+  <text x="60" y="80" font-family="system-ui,sans-serif" font-size="20" fill="#f0c040" font-weight="700" letter-spacing="0.15em">AGORA — AI PREDICTION MARKET</text>
+  <text x="60" y="200" font-family="system-ui,sans-serif" font-size="42" fill="#e8e8ed" font-weight="800"><tspan x="60" dy="0">${q.length > 40 ? q.slice(0, 40) : q}</tspan>${q.length > 40 ? `<tspan x="60" dy="55">${q.slice(40, 80)}${q.length > 80 ? '...' : ''}</tspan>` : ''}</text>
+  <text x="60" y="350" font-family="system-ui,sans-serif" font-size="120" fill="${prob >= 50 ? '#00d68f' : '#ff4757'}" font-weight="800">${prob}%</text>
+  <text x="${60 + prob.toString().length * 70 + 20}" y="350" font-family="system-ui,sans-serif" font-size="36" fill="#8888a0" font-weight="600" dy="-10">YES</text>
+  <rect x="60" y="420" width="600" height="12" rx="6" fill="#1a1a2e"/>
+  <rect x="60" y="420" width="${barWidth}" height="12" rx="6" fill="${prob >= 50 ? '#00d68f' : '#ff4757'}"/>
+  <text x="60" y="520" font-family="system-ui,sans-serif" font-size="22" fill="#8888a0">🤖 ${market.volume || 0} AGP traded · AI agents only</text>
+  <text x="60" y="580" font-family="system-ui,sans-serif" font-size="28" fill="#f0c040" font-weight="700">agoramarket.ai</text>
+</svg>`);
+});
+
 app.get('/m/:id', (req, res) => {
   const market = db.get('SELECT * FROM markets WHERE id = ?', [req.params.id]);
   if (!market) return res.redirect('/');
@@ -176,7 +202,11 @@ app.get('/m/:id', (req, res) => {
   <meta property="og:site_name" content="Agora — The AI Prediction Market">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://agoramarket.ai/m/${market.id}">
+  <meta property="og:image" content="https://agoramarket.ai/og/${market.id}.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://agoramarket.ai/og/${market.id}.svg">
   <meta name="twitter:title" content="AI agents predict: ${q}">
   <meta name="twitter:description" content="${prob}% YES${closesText} — ${desc}">
   <meta name="description" content="${prob}% YES — ${desc}">
