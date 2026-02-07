@@ -179,8 +179,22 @@ async function registerAgent(agent) {
 /**
  * Build search queries based on agent orientation
  */
-function buildSearchQueries(agent) {
+function buildSearchQueries(agent, round) {
   const base = 'Super Bowl LX 2026 Seahawks Patriots';
+  
+  // Round 2+: all agents get the SAME comprehensive research queries
+  // Let model differences emerge naturally, not from different inputs
+  if (round >= 2) {
+    return [
+      `${base} key matchup analysis strengths weaknesses`,
+      `${base} injury report Drake Maye shoulder update`,
+      `${base} expert picks predictions odds`,
+      `Seahawks offense vs Patriots defense matchup breakdown`,
+      `${base} betting line movement sharp money trends`
+    ];
+  }
+  
+  // Round 1: orientation-specific queries
   const orientationQueries = {
     statistical: [
       `${base} team statistics offense defense`,
@@ -257,6 +271,34 @@ async function callModel(modelKey, systemPrompt, userPrompt) {
 async function getAgentDecision(agent, context) {
   const systemPrompt = buildSystemPrompt(agent);
   
+  const round2Plus = context.actionNumber >= 2;
+  
+  const deepResearchBlock = round2Plus ? `
+## Deep Research Task
+
+This is Round ${context.actionNumber}. You have already traded in previous rounds. Now go DEEPER.
+
+Produce a comprehensive independent analysis of this Super Bowl matchup. Consider ALL of the following:
+- **Offensive matchups**: How does each team's offense attack? What are their tendencies?
+- **Defensive matchups**: How does each defense scheme? What are their vulnerabilities?
+- **Key player matchups**: Which individual matchups will decide this game?
+- **Injury impact**: How do current injuries (especially Drake Maye's shoulder/illness) affect the game?
+- **Historical patterns**: What do past Super Bowls tell us about this type of matchup?
+- **Coaching**: How do these coaching staffs compare in big games?
+- **Intangibles**: Motivation, rest, travel, venue, weather, crowd factor
+
+Think independently. Form YOUR OWN view. Do not just follow the current market price.
+If you believe the market is mispriced, bet aggressively. If you think it's fair, you may hold.
+` : '';
+
+  const recentComments = context.recentComments?.length ? `
+## Other Agents' Analysis (from previous rounds)
+
+${context.recentComments.slice(0, 8).map(c => `- **@${c.handle}**: "${c.text?.slice(0, 200)}"`).join('\n')}
+
+Consider these perspectives but form your OWN independent view. Do you agree or disagree? Why?
+` : '';
+
   const userPrompt = `
 ## Current Situation
 
@@ -264,18 +306,20 @@ async function getAgentDecision(agent, context) {
 **Current price:** ${(context.market.probability * 100).toFixed(1)}% Seahawks
 **Your balance:** ${context.balance} AGP
 **Your position:** ${context.position.yes_shares.toFixed(1)} YES shares, ${context.position.no_shares.toFixed(1)} NO shares
+${round2Plus ? `**Round:** ${context.actionNumber} (you traded in previous rounds — update your view based on new information)` : ''}
+${deepResearchBlock}
 
-## Recent Information from Web Search
+## Research from Web Search
 
 ${context.searchResults.map(r => `### Search: "${r.query}"\n${r.results.map(s => `- **${s.title}**: ${s.snippet}`).join('\n')}`).join('\n\n')}
-
+${recentComments}
 ## Recent Trades in Market
 
 ${context.recentTrades?.map(t => `- ${t.agent_handle || 'Agent'} bought ${t.outcome?.toUpperCase() || '?'} for ${t.amount} AGP`).join('\n') || 'No recent trades yet'}
 
 ## Your Task
 
-Based on your analysis and personality, decide your action:
+Based on your deep analysis and personality, decide your action:
 
 1. **BUY YES** - Bet on Seahawks winning (current price: ${(context.market.probability * 100).toFixed(1)}%)
 2. **BUY NO** - Bet on Patriots winning (current price: ${((1 - context.market.probability) * 100).toFixed(1)}%)
@@ -348,16 +392,27 @@ async function runAgentAction(agent, actionNumber) {
   console.log(`  💰 Balance: ${balance} AGP | Position: ${position.yes_shares.toFixed(0)} YES, ${position.no_shares.toFixed(0)} NO`);
   
   // 3. Web search
-  const queries = buildSearchQueries(agent);
-  console.log(`  🔍 Searching...`);
+  const queries = buildSearchQueries(agent, actionNumber);
+  console.log(`  🔍 Searching (${queries.length} queries)...`);
   const searchResults = await webSearch(queries);
   
-  // 4. Get recent trades
+  // 4. Get recent trades and comments
   const recentTrades = market.recent_trades?.slice(0, 5) || [];
+  // Get comments from other agents (for Round 2+)
+  let recentComments = [];
+  if (actionNumber >= 2) {
+    try {
+      const mktRes = await fetch(`${AGORA_API}/markets/${MARKET_ID}`);
+      if (mktRes.ok) {
+        const mktData = await mktRes.json();
+        recentComments = (mktData.comments || []).slice(0, 15);
+      }
+    } catch (e) { /* ignore */ }
+  }
   
   // 5. Get agent decision from LLM
   console.log(`  🤔 Thinking (${MODEL_MAP[agent.model]})...`);
-  const context = { market, balance, position, searchResults, recentTrades };
+  const context = { market, balance, position, searchResults, recentTrades, recentComments, actionNumber };
   const decision = await getAgentDecision(agent, context);
   
   console.log(`  📋 Decision: ${decision.action} ${decision.amount > 0 ? decision.amount + ' AGP' : ''} (${decision.confidence})`);
