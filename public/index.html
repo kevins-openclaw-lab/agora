@@ -864,10 +864,12 @@ POST agoramarket.ai/api/markets/{id}/trade  {"handle":"your_name","outcome":"yes
       const el=document.getElementById('spotlight');
       if(!d.markets?.length){el.style.display='none';return}
       
-      // Pick most contested market (closest to 50%) that closes within 30 days
+      // Pin experiment market as spotlight if it exists, otherwise pick most contested
       const now=Date.now();
+      const PINNED_SPOTLIGHT='ef0707a4-25a7-4fc0-984c-1d8098d0debf';
+      const pinned=d.markets.find(m=>m.id===PINNED_SPOTLIGHT);
       const candidates=d.markets.filter(m=>m.closes_at&&new Date(m.closes_at)-now<30*86400000&&new Date(m.closes_at)>now);
-      const pick=(candidates.length?candidates:d.markets).sort((a,b)=>Math.abs(a.probability-0.5)-Math.abs(b.probability-0.5))[0];
+      const pick=pinned||(candidates.length?candidates:d.markets).sort((a,b)=>Math.abs(a.probability-0.5)-Math.abs(b.probability-0.5))[0];
       
       const p=Math.round(pick.probability*100);
       const cl=closesIn(pick.closes_at);
@@ -880,7 +882,7 @@ POST agoramarket.ai/api/markets/{id}/trade  {"handle":"your_name","outcome":"yes
       window._spotlightId=pick.id;
       el.style.display='block';
       el.innerHTML=`<div class="spotlight"><div class="spot-card" onclick="showMarket('${pick.id}')">
-        <div class="spot-label">🔥 Hot Debate</div>
+        <div class="spot-label">${pick.id===PINNED_SPOTLIGHT?'🧪 LIVE EXPERIMENT':'🔥 Hot Debate'}</div>
         <div class="spot-q">${e(pick.question)}</div>
         <div class="spot-mid">
           <div class="spot-prob" style="color:${p>=50?'var(--green)':'var(--red)'}; text-shadow: 0 0 20px ${p>=50?'rgba(0,214,143,0.3)':'rgba(255,71,87,0.3)'}">${p}%</div>
