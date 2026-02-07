@@ -1,3 +1,5 @@
+require('dotenv').config({ path: __dirname + '/../.env' });
+
 /**
  * Super Bowl LX Experiment Orchestrator
  * 

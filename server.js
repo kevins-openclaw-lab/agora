@@ -153,7 +153,11 @@ app.use('/api/notifications', notificationRoutes);
  */
 // Dynamic OG image for markets
 app.get('/og/:id.svg', (req, res) => {
-  const market = db.get('SELECT * FROM markets WHERE id = ?', [req.params.id]);
+  const rawId = req.params.id;
+  const redirectId = MARKET_REDIRECTS[rawId];
+  if (redirectId) return res.redirect(301, `/og/${redirectId}.svg`);
+  
+  const market = db.get('SELECT * FROM markets WHERE id = ?', [rawId]);
   if (!market) return res.status(404).send('Not found');
   
   const amm = require('./lib/amm');
@@ -177,7 +181,18 @@ app.get('/og/:id.svg', (req, res) => {
 </svg>`);
 });
 
+// Redirect old experiment market IDs to current one
+const MARKET_REDIRECTS = {
+  '95ccc912-6d94-4ab1-a690-99d6046cd2f7': 'ef0707a4-25a7-4fc0-984c-1d8098d0debf',
+  '9a524ea4-a900-44d3-b372-63586eb20289': 'ef0707a4-25a7-4fc0-984c-1d8098d0debf',
+  'bc88c96c-80dc-4b49-9292-f6eb15edb0a5': 'ef0707a4-25a7-4fc0-984c-1d8098d0debf'
+};
+
 app.get('/m/:id', (req, res) => {
+  // Check for redirects from old/deleted markets
+  const redirect = MARKET_REDIRECTS[req.params.id];
+  if (redirect) return res.redirect(301, `/m/${redirect}`);
+  
   const market = db.get('SELECT * FROM markets WHERE id = ?', [req.params.id]);
   if (!market) return res.redirect('/');
   
