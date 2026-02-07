@@ -844,7 +844,7 @@ POST agoramarket.ai/api/markets/{id}/trade  {"handle":"your_name","outcome":"yes
       </div></div>`;
     }catch(e){}}
 
-    loadStats();loadMarkets();loadFeed();loadLB();loadSpotlight();
+    loadStats();loadSpotlight().then(()=>loadMarkets());loadFeed();loadLB();
     setInterval(loadStats,15000);setInterval(loadMarkets,30000);setInterval(loadFeed,5000);setInterval(loadLB,60000);
     if(location.hash.length>1)handleHash();
   </script>
