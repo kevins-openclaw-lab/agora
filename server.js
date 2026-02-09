@@ -19,6 +19,7 @@ const agentRoutes = require('./routes/agents');
 const marketRoutes = require('./routes/markets');
 const engagementRoutes = require('./routes/engagement');
 const notificationRoutes = require('./routes/notifications');
+const blogRoutes = require('./routes/blog');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -145,6 +146,15 @@ app.use('/api/agents', agentRoutes);
 app.use('/api/markets', marketRoutes);
 app.use('/api/engagement', engagementRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/blog', blogRoutes);
+
+// Serve blog page
+app.get('/blog', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'blog.html'));
+});
+app.get('/blog/:slug', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'blog.html'));
+});
 
 /**
  * Dynamic social preview for shared market links
