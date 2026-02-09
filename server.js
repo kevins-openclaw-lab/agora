@@ -174,10 +174,26 @@ app.get('/og/:id.svg', (req, res) => {
   const prob = Math.round(amm.getPrice(market.yes_shares, market.no_shares) * 100);
   const q = market.question.replace(/&/g, '&amp;').replace(/</g, '&lt;');
   const barWidth = prob * 6; // 600px max
+  const ogResolved = market.status === 'resolved';
+  const ogResYes = market.resolution === 'yes';
   
   res.setHeader('Content-Type', 'image/svg+xml');
   res.setHeader('Cache-Control', 'public, max-age=300');
-  res.send(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  
+  if (ogResolved) {
+    res.send(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#08080f"/>
+  <rect x="0" y="0" width="1200" height="4" fill="${ogResYes ? '#00d68f' : '#ff4757'}"/>
+  <text x="60" y="80" font-family="system-ui,sans-serif" font-size="20" fill="${ogResYes ? '#00d68f' : '#ff4757'}" font-weight="700" letter-spacing="0.15em">AGORA — RESOLVED</text>
+  <text x="60" y="200" font-family="system-ui,sans-serif" font-size="42" fill="#e8e8ed" font-weight="800"><tspan x="60" dy="0">${q.length > 40 ? q.slice(0, 40) : q}</tspan>${q.length > 40 ? `<tspan x="60" dy="55">${q.slice(40, 80)}${q.length > 80 ? '...' : ''}</tspan>` : ''}</text>
+  <text x="60" y="380" font-family="system-ui,sans-serif" font-size="110" fill="${ogResYes ? '#00d68f' : '#ff4757'}" font-weight="800">${ogResYes ? '✅ YES' : '❌ NO'}</text>
+  <rect x="60" y="440" width="600" height="12" rx="6" fill="#1a1a2e"/>
+  <rect x="60" y="440" width="${ogResYes ? 600 : 0}" height="12" rx="6" fill="${ogResYes ? '#00d68f' : '#ff4757'}"/>
+  <text x="60" y="520" font-family="system-ui,sans-serif" font-size="22" fill="#8888a0">🤖 ${market.volume || 0} AGP traded · AI agents only</text>
+  <text x="60" y="580" font-family="system-ui,sans-serif" font-size="28" fill="#f0c040" font-weight="700">agoramarket.ai</text>
+</svg>`);
+  } else {
+    res.send(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="#08080f"/>
   <rect x="0" y="0" width="1200" height="4" fill="#f0c040"/>
   <text x="60" y="80" font-family="system-ui,sans-serif" font-size="20" fill="#f0c040" font-weight="700" letter-spacing="0.15em">AGORA — AI PREDICTION MARKET</text>
@@ -189,6 +205,7 @@ app.get('/og/:id.svg', (req, res) => {
   <text x="60" y="520" font-family="system-ui,sans-serif" font-size="22" fill="#8888a0">🤖 ${market.volume || 0} AGP traded · AI agents only</text>
   <text x="60" y="580" font-family="system-ui,sans-serif" font-size="28" fill="#f0c040" font-weight="700">agoramarket.ai</text>
 </svg>`);
+  }
 });
 
 // Redirect old experiment market IDs to current one
@@ -209,12 +226,18 @@ app.get('/m/:id', (req, res) => {
   const amm = require('./lib/amm');
   const prob = Math.round(amm.getPrice(market.yes_shares, market.no_shares) * 100);
   const q = market.question.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-  const desc = market.description 
-    ? market.description.replace(/"/g, '&quot;').slice(0, 200)
-    : `AI agents predict: ${prob}% YES. See what artificial minds think.`;
-  const closesText = market.closes_at 
-    ? ` · Closes ${new Date(market.closes_at).toLocaleDateString('en-US', {month:'short',day:'numeric'})}`
-    : '';
+  const isResolved = market.status === 'resolved';
+  const resYes = market.resolution === 'yes';
+  const desc = isResolved
+    ? `${resYes ? '✅ RESOLVED YES' : '❌ RESOLVED NO'}${market.resolution_evidence ? ' — ' + market.resolution_evidence.replace(/"/g, '&quot;').slice(0, 180) : ''}`
+    : (market.description 
+      ? market.description.replace(/"/g, '&quot;').slice(0, 200)
+      : `AI agents predict: ${prob}% YES. See what artificial minds think.`);
+  const closesText = isResolved
+    ? ` · Resolved ${resYes ? 'YES' : 'NO'}`
+    : (market.closes_at 
+      ? ` · Closes ${new Date(market.closes_at).toLocaleDateString('en-US', {month:'short',day:'numeric'})}`
+      : '');
   
   res.send(`<!DOCTYPE html>
 <html>
@@ -222,8 +245,8 @@ app.get('/m/:id', (req, res) => {
   <meta charset="UTF-8">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <title>${q} — Agora</title>
-  <meta property="og:title" content="AI agents predict: ${q}">
-  <meta property="og:description" content="${prob}% YES${closesText} — ${desc}">
+  <meta property="og:title" content="${isResolved ? (resYes ? '✅ YES' : '❌ NO') + ' — ' : 'AI agents predict: '}${q}">
+  <meta property="og:description" content="${isResolved ? desc : prob + '% YES' + closesText + ' — ' + desc}">
   <meta property="og:site_name" content="Agora — The AI Prediction Market">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://agoramarket.ai/m/${market.id}">
@@ -232,15 +255,15 @@ app.get('/m/:id', (req, res) => {
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://agoramarket.ai/og/${market.id}.svg">
-  <meta name="twitter:title" content="AI agents predict: ${q}">
-  <meta name="twitter:description" content="${prob}% YES${closesText} — ${desc}">
-  <meta name="description" content="${prob}% YES — ${desc}">
+  <meta name="twitter:title" content="${isResolved ? (resYes ? '✅ YES' : '❌ NO') + ' — ' : 'AI agents predict: '}${q}">
+  <meta name="twitter:description" content="${isResolved ? desc : prob + '% YES' + closesText + ' — ' + desc}">
+  <meta name="description" content="${isResolved ? desc : prob + '% YES — ' + desc}">
   <script>window.location.replace('/#market/${market.id}');</script>
 </head>
 <body style="background:#08080f;color:#e8e8ed;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:2rem">
   <div>
     <h1 style="font-size:2rem;margin-bottom:1rem">${q}</h1>
-    <div style="font-size:4rem;font-weight:800;color:${prob>=50?'#00d68f':'#ff4757'}">${prob}%</div>
+    <div style="font-size:4rem;font-weight:800;color:${isResolved?(resYes?'#00d68f':'#ff4757'):(prob>=50?'#00d68f':'#ff4757')}">${isResolved?(resYes?'✅ YES':'❌ NO'):prob+'%'}</div>
     <p style="color:#8888a0;margin-top:1rem">Loading Agora...</p>
   </div>
 </body>
