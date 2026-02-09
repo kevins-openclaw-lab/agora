@@ -1,0 +1,65 @@
+#!/bin/bash
+# Run all 80 agents one at a time with timeout protection
+# Usage: ./run-round-safe.sh <round_number>
+ROUND=${1:-3}
+DIR="$(cd "$(dirname "$0")" && pwd)"
+LOG="$DIR/logs/round-${ROUND}-safe.log"
+
+echo "🏈 ROUND $ROUND — $(date -u)" | tee "$LOG"
+echo "Running agents one at a time (safe mode)..." | tee -a "$LOG"
+
+cd "$DIR/orchestrator"
+
+# Get agent IDs
+AGENTS=$(node -e "const c=require('../agents/agent-configs.json'); c.agents.forEach(a=>console.log(a.id))")
+TOTAL=$(echo "$AGENTS" | wc -l)
+COUNT=0
+TRADES=0
+HOLDS=0
+ERRORS=0
+
+for AGENT in $AGENTS; do
+  COUNT=$((COUNT + 1))
+  echo -n "[$COUNT/$TOTAL] $AGENT ... " | tee -a "$LOG"
+  
+  # Run with 120s timeout, memory-limited to avoid OOM
+  OUTPUT=$(timeout 120 node --max-old-space-size=256 index.js agent "$AGENT" "$ROUND" 2>&1)
+  EXIT=$?
+  
+  if [ $EXIT -eq 124 ]; then
+    echo "⏰ TIMEOUT" | tee -a "$LOG"
+    ERRORS=$((ERRORS + 1))
+  elif [ $EXIT -ne 0 ]; then
+    echo "❌ ERROR (exit $EXIT)" | tee -a "$LOG"
+    ERRORS=$((ERRORS + 1))
+  elif echo "$OUTPUT" | grep -q "✅ Trade executed"; then
+    DECISION=$(echo "$OUTPUT" | grep "📋 Decision:" | tail -1)
+    TRADE=$(echo "$OUTPUT" | grep "✅ Trade executed" | tail -1)
+    echo "$DECISION | $TRADE" | tee -a "$LOG"
+    TRADES=$((TRADES + 1))
+  elif echo "$OUTPUT" | grep -q "HOLD"; then
+    echo "📋 HOLD" | tee -a "$LOG"
+    HOLDS=$((HOLDS + 1))
+  else
+    echo "⚠️ Unknown result" | tee -a "$LOG"
+    ERRORS=$((ERRORS + 1))
+  fi
+  
+  # Full output to per-round detailed log
+  echo "=== $AGENT ===" >> "$DIR/logs/round-${ROUND}-detail.log"
+  echo "$OUTPUT" >> "$DIR/logs/round-${ROUND}-detail.log"
+  echo "" >> "$DIR/logs/round-${ROUND}-detail.log"
+  
+  # Brief pause between agents
+  sleep 1
+done
+
+echo "" | tee -a "$LOG"
+echo "✅ ROUND $ROUND COMPLETE — $(date -u)" | tee -a "$LOG"
+echo "  Trades: $TRADES | Holds: $HOLDS | Errors: $ERRORS" | tee -a "$LOG"
+
+# Get final market state
+MARKET=$(curl -s "https://agoramarket.ai/api/markets/ef0707a4-25a7-4fc0-984c-1d8098d0debf")
+PROB=$(echo "$MARKET" | node -e "const d=JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')); console.log((d.market.probability*100).toFixed(1))")
+VOL=$(echo "$MARKET" | node -e "const d=JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')); console.log(d.market.volume)")
+echo "📊 Final: ${PROB}% Seahawks | Volume: ${VOL} AGP" | tee -a "$LOG"
