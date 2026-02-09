@@ -12,6 +12,7 @@ const path = require('path');
 
 // Load configs
 const agentConfigs = require('../agents/agent-configs.json');
+const ROUND_CONFIGS = require('./round-configs');
 
 // OpenRouter unified API
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
@@ -20,7 +21,7 @@ const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 // Model mapping - using latest frontier models
 const MODEL_MAP = {
   'claude-opus-4.5': 'anthropic/claude-opus-4.6',      // Upgraded to 4.6!
-  'gpt-5': 'openai/gpt-5.2-pro',                       // Full reasoning
+  'gpt-5': 'openai/gpt-5.2',                             // Standard (was Pro - 12x cheaper)
   'gemini-3': 'google/gemini-2.5-pro',                 // Gemini 2.5 Pro (3 preview is buggy)
   'grok-4': 'x-ai/grok-4.1-fast'                       // Grok 4.1
 };
@@ -177,6 +178,20 @@ async function registerAgent(agent) {
 }
 
 /**
+ * Get market comments (for cross-examine round)
+ */
+async function getMarketComments() {
+  try {
+    const response = await fetch(`${AGORA_URL}/api/markets/${MARKET_ID}`);
+    if (!response.ok) return [];
+    const data = await response.json();
+    return data.comments || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+/**
  * Build search queries based on agent orientation
  */
 function buildSearchQueries(agent, round) {
@@ -251,7 +266,7 @@ async function callModel(modelKey, systemPrompt, userPrompt) {
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt }
       ],
-      max_tokens: 2000,
+      max_tokens: modelKey === 'gemini-3' ? 3000 : 1000,
       temperature: 0.7
     })
   });
@@ -267,13 +282,29 @@ async function callModel(modelKey, systemPrompt, userPrompt) {
 
 /**
  * Get agent's decision via LLM
+ * Supports round-specific prompt configs from round-configs.js
  */
 async function getAgentDecision(agent, context) {
-  const systemPrompt = buildSystemPrompt(agent);
+  const roundConfig = ROUND_CONFIGS[context.actionNumber];
+  const systemPrompt = roundConfig?.systemPromptOverride || buildSystemPrompt(agent);
   
-  const round2Plus = context.actionNumber >= 2;
+  let userPrompt;
   
-  const deepResearchBlock = round2Plus ? `
+  if (roundConfig?.userPromptBuilder) {
+    // Use round-specific prompt
+    userPrompt = roundConfig.userPromptBuilder(agent, context);
+  } else if (roundConfig?.splitMode) {
+    // Split mode: use A or B prompt based on agent index
+    const agentIndex = agentConfigs.agents.findIndex(a => a.id === agent.id);
+    const isGroupA = agentIndex < 40;
+    userPrompt = isGroupA
+      ? roundConfig.userPromptBuilderA(agent, context)
+      : roundConfig.userPromptBuilderB(agent, context);
+  } else {
+    // Default prompt (rounds 1-2 and any unrecognized round)
+    const round2Plus = context.actionNumber >= 2;
+    
+    const deepResearchBlock = round2Plus ? `
 ## Deep Research Task
 
 This is Round ${context.actionNumber}. You have already traded in previous rounds. Now go DEEPER.
@@ -291,7 +322,7 @@ Think independently. Form YOUR OWN view. Do not just follow the current market p
 If you believe the market is mispriced, bet aggressively. If you think it's fair, you may hold.
 ` : '';
 
-  const recentComments = context.recentComments?.length ? `
+    const recentComments = context.recentComments?.length ? `
 ## Other Agents' Analysis (from previous rounds)
 
 ${context.recentComments.slice(0, 8).map(c => `- **@${c.handle}**: "${c.text?.slice(0, 200)}"`).join('\n')}
@@ -299,7 +330,7 @@ ${context.recentComments.slice(0, 8).map(c => `- **@${c.handle}**: "${c.text?.sl
 Consider these perspectives but form your OWN independent view. Do you agree or disagree? Why?
 ` : '';
 
-  const userPrompt = `
+    userPrompt = `
 ## Current Situation
 
 **Market:** Will Seattle Seahawks win Super Bowl LX?
@@ -338,10 +369,28 @@ AMOUNT: [number or 0 if holding]
 CONFIDENCE: [LOW / MEDIUM / HIGH]
 </decision>
 `;
+  }
 
   try {
     const response = await callModel(agent.model, systemPrompt, userPrompt);
-    return parseDecision(response);
+    let decision = parseDecision(response);
+    
+    // Gemini fix: if no decision tags found, make a follow-up call
+    if (decision.action === 'HOLD' && decision.amount === 0 && !response.includes('<decision>')) {
+      console.log(`  🔧 No <decision> tags — requesting structured decision...`);
+      try {
+        const followUp = await callModel(agent.model, systemPrompt, 
+          `You just wrote this analysis:\n\n${response}\n\nNow provide your trading decision. Respond with ONLY this format, nothing else:\n\n<decision>\nACTION: BUY_YES or BUY_NO or HOLD\nAMOUNT: [number between 0 and ${context.balance}]\nCONFIDENCE: LOW or MEDIUM or HIGH\n</decision>`);
+        const retry = parseDecision(followUp);
+        if (retry.action !== 'HOLD' || followUp.includes('<decision>')) {
+          retry.reasoning = decision.reasoning || response;
+          retry.raw = response + '\n---FOLLOWUP---\n' + followUp;
+          decision = retry;
+        }
+      } catch (e2) { /* use original decision */ }
+    }
+    
+    return decision;
   } catch (e) {
     console.error(`  ❌ Model call failed for ${agent.id}:`, e.message);
     return { action: 'HOLD', amount: 0, reasoning: `Error: ${e.message}`, confidence: 'LOW', raw: '' };
@@ -362,12 +411,40 @@ function parseDecision(response) {
   const amountMatch = decisionText.match(/AMOUNT:\s*(\d+)/);
   const confidenceMatch = decisionText.match(/CONFIDENCE:\s*(LOW|MEDIUM|HIGH)/i);
   
+  // Parse score prediction (Round 7)
+  let scorePrediction = null;
+  const scoreMatch = response.match(/<score_prediction>([\s\S]*?)<\/score_prediction>/);
+  if (scoreMatch) {
+    const scoreText = scoreMatch[1];
+    const seahawksScore = scoreText.match(/SEAHAWKS:\s*(\d+)/i);
+    const patriotsScore = scoreText.match(/PATRIOTS:\s*(\d+)/i);
+    const winner = scoreText.match(/WINNER:\s*(SEAHAWKS|PATRIOTS)/i);
+    const mvp = scoreText.match(/MVP:\s*(.+)/i);
+    const keyFactor = scoreText.match(/KEY_FACTOR:\s*(.+)/i);
+    scorePrediction = {
+      seahawks: seahawksScore ? parseInt(seahawksScore[1]) : null,
+      patriots: patriotsScore ? parseInt(patriotsScore[1]) : null,
+      winner: winner ? winner[1].toUpperCase() : null,
+      mvp: mvp ? mvp[1].trim() : null,
+      keyFactor: keyFactor ? keyFactor[1].trim() : null
+    };
+  }
+
+  // Parse belief_updated (Round 4)
+  const beliefMatch = decisionText.match(/BELIEF_UPDATED:\s*(YES|NO|PARTIALLY)/i);
+  
+  // Parse news_impact (Round 5)
+  const newsMatch = decisionText.match(/NEWS_IMPACT:\s*(NONE|MINOR|SIGNIFICANT|MAJOR)/i);
+
   return {
     action: actionMatch ? actionMatch[1].toUpperCase() : 'HOLD',
     amount: amountMatch ? parseInt(amountMatch[1]) : 0,
     confidence: confidenceMatch ? confidenceMatch[1].toUpperCase() : 'MEDIUM',
     reasoning,
-    raw: response
+    raw: response,
+    ...(scorePrediction && { scorePrediction }),
+    ...(beliefMatch && { beliefUpdated: beliefMatch[1].toUpperCase() }),
+    ...(newsMatch && { newsImpact: newsMatch[1].toUpperCase() })
   };
 }
 
@@ -391,10 +468,17 @@ async function runAgentAction(agent, actionNumber) {
   const { balance, position } = await getAgentState(handle);
   console.log(`  💰 Balance: ${balance} AGP | Position: ${position.yes_shares.toFixed(0)} YES, ${position.no_shares.toFixed(0)} NO`);
   
-  // 3. Web search
-  const queries = buildSearchQueries(agent, actionNumber);
-  console.log(`  🔍 Searching (${queries.length} queries)...`);
-  const searchResults = await webSearch(queries);
+  // 3. Web search (respects round config)
+  const roundConfig = ROUND_CONFIGS[actionNumber];
+  let searchResults = [];
+  
+  if (roundConfig?.disableSearch) {
+    console.log(`  🙈 Search DISABLED for ${roundConfig.name}`);
+  } else {
+    const queries = roundConfig?.searchQueryOverride || buildSearchQueries(agent, actionNumber);
+    console.log(`  🔍 Searching (${queries.length} queries)...`);
+    searchResults = await webSearch(queries);
+  }
   
   // 4. Get recent trades and comments
   const recentTrades = market.recent_trades?.slice(0, 5) || [];
@@ -410,9 +494,47 @@ async function runAgentAction(agent, actionNumber) {
     } catch (e) { /* ignore */ }
   }
   
+  // 4b. Round 6: collect ALL comments for open book round
+  let allComments = [];
+  if (roundConfig?.splitMode && actionNumber === 6) {
+    try {
+      const comments = await getMarketComments();
+      allComments = comments.slice(0, 60); // Cap at 60 to fit context window
+    } catch (e) { /* ignore */ }
+  }
+
+  // 4c. Round 4: collect opposing arguments for cross-examine
+  let opposingArgument = null;
+  let opposingModelFamily = null;
+  if (roundConfig?.requiresPrep && roundConfig.prepFunction === 'collectOpposingArguments') {
+    try {
+      const comments = await getMarketComments();
+      // Find strongest opposing argument from a different model family
+      const agentModelFamily = agent.model; // e.g. 'claude-opus-4.5'
+      const opposing = comments.filter(c => {
+        const handle = c.handle || '';
+        // Match model family from handle prefix
+        if (agentModelFamily.includes('claude') && !handle.includes('opus')) return true;
+        if (agentModelFamily.includes('gpt') && !handle.includes('gpt')) return true;
+        if (agentModelFamily.includes('gemini') && !handle.includes('gemini')) return true;
+        if (agentModelFamily.includes('grok') && !handle.includes('grok')) return true;
+        return false;
+      });
+      // Pick the longest comment as "strongest" (proxy for most detailed)
+      if (opposing.length > 0) {
+        const best = opposing.sort((a, b) => (b.text?.length || 0) - (a.text?.length || 0))[0];
+        opposingArgument = best.text;
+        opposingModelFamily = best.handle?.includes('opus') ? 'Claude' :
+                             best.handle?.includes('gpt') ? 'GPT-5' :
+                             best.handle?.includes('gemini') ? 'Gemini' :
+                             best.handle?.includes('grok') ? 'Grok' : 'another AI';
+      }
+    } catch (e) { /* ignore */ }
+  }
+
   // 5. Get agent decision from LLM
   console.log(`  🤔 Thinking (${MODEL_MAP[agent.model]})...`);
-  const context = { market, balance, position, searchResults, recentTrades, recentComments, actionNumber };
+  const context = { market, balance, position, searchResults, recentTrades, recentComments, actionNumber, opposingArgument, opposingModelFamily, allComments };
   const decision = await getAgentDecision(agent, context);
   
   console.log(`  📋 Decision: ${decision.action} ${decision.amount > 0 ? decision.amount + ' AGP' : ''} (${decision.confidence})`);
@@ -447,6 +569,8 @@ async function runAgentAction(agent, actionNumber) {
     risk: agent.risk,
     orientation: agent.orientation,
     action_number: actionNumber,
+    round_name: roundConfig?.name || (actionNumber <= 2 ? `Round ${actionNumber}` : 'Standard'),
+    round_emoji: roundConfig?.emoji || '🏈',
     market_state: {
       probability: market.probability,
       yes_shares: market.yes_shares,
@@ -477,8 +601,13 @@ async function runAllAgents(actionNumber) {
   const agents = agentConfigs.agents;
   const startTime = Date.now();
   
+  const roundConfig = ROUND_CONFIGS[actionNumber];
   console.log(`\n${'='.repeat(60)}`);
   console.log(`🏈 ROUND ${actionNumber} - ${new Date().toISOString()}`);
+  if (roundConfig) {
+    console.log(`${roundConfig.emoji} ${roundConfig.name}: ${roundConfig.description}`);
+    console.log(`Hypothesis: ${roundConfig.hypothesis}`);
+  }
   console.log(`Running ${agents.length} agents...`);
   console.log('='.repeat(60));
   
