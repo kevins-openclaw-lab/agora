@@ -1,0 +1,1073 @@
+🏈 ROUND 5 (Breaking News) — 2026-02-08T14:05:21.776Z
+
+=== opus_con_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-08T14:05:21.847Z] 🧮 opus_con_stat_01 (round 5)...
+  📊 Market: 41.3% Seahawks
+  💰 Balance: 1410 AGP | Position: 5961 YES, 4194 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+
+=== opus_con_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+[2026-02-08T14:05:46.992Z] 📰 opus_con_news_01 (round 5)...
+  📊 Market: 41.3% Seahawks
+  💰 Balance: 2050 AGP | Position: 5961 YES, 4194 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_YES 75 AGP (LOW)
+  ✅ Trade executed: 75 AGP on YES
+  💬 Posted reasoning comment
+
+
+=== opus_con_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+
+[2026-02-08T14:06:13.897Z] 👥 opus_con_sent_01 (round 5)...
+  📊 Market: 42.1% Seahawks
+  💰 Balance: 2045 AGP | Position: 5858 YES, 4268 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+
+=== opus_con_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+[2026-02-08T14:06:36.237Z] 🤔 opus_con_cont_01 (round 5)...
+  📊 Market: 42.1% Seahawks
+  💰 Balance: 2275 AGP | Position: 5858 YES, 4268 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== opus_mod_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-08T14:06:58.887Z] 📊 opus_mod_stat_01 (round 5)...
+  📊 Market: 42.1% Seahawks
+  💰 Balance: 1770 AGP | Position: 5858 YES, 4268 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_YES 150 AGP (LOW)
+  ✅ Trade executed: 150 AGP on YES
+  💬 Posted reasoning comment
+
+
+=== opus_mod_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+
+[2026-02-08T14:07:23.852Z] 📈 opus_mod_stat_02 (round 5)...
+  📊 Market: 43.8% Seahawks
+  💰 Balance: 1975 AGP | Position: 5663 YES, 4415 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== opus_mod_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-08T14:07:45.764Z] 🗞️ opus_mod_news_01 (round 5)...
+  📊 Market: 43.8% Seahawks
+  💰 Balance: 1875 AGP | Position: 5663 YES, 4415 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== opus_mod_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+[2026-02-08T14:08:07.491Z] 📡 opus_mod_sent_01 (round 5)...
+  📊 Market: 43.8% Seahawks
+  💰 Balance: 1310 AGP | Position: 5663 YES, 4415 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== opus_mod_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:08:29.467Z] 🎭 opus_mod_cont_01 (round 5)...
+  📊 Market: 43.8% Seahawks
+  💰 Balance: 1450 AGP | Position: 5663 YES, 4415 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== opus_mod_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:08:53.432Z] 🃏 opus_mod_cont_02 (round 5)...
+  📊 Market: 43.8% Seahawks
+  💰 Balance: 1400 AGP | Position: 5663 YES, 4415 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_YES 150 AGP (LOW)
+  ✅ Trade executed: 150 AGP on YES
+  💬 Posted reasoning comment
+
+
+=== opus_agg_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+
+[2026-02-08T14:09:19.231Z] 🎯 opus_agg_stat_01 (round 5)...
+  📊 Market: 45.4% Seahawks
+  💰 Balance: 1200 AGP | Position: 5480 YES, 4562 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_YES 150 AGP (MEDIUM)
+  ✅ Trade executed: 150 AGP on YES
+  💬 Posted reasoning comment
+
+
+=== opus_agg_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-08T14:09:46.355Z] ⚡ opus_agg_news_01 (round 5)...
+  📊 Market: 47.0% Seahawks
+  💰 Balance: 575 AGP | Position: 5309 YES, 4709 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_YES 150 AGP (MEDIUM)
+  ✅ Trade executed: 150 AGP on YES
+  💬 Posted reasoning comment
+
+
+=== opus_agg_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  enable debug logging with { debug: true }
+
+[2026-02-08T14:10:10.872Z] 🚀 opus_agg_news_02 (round 5)...
+  📊 Market: 48.5% Seahawks
+  💰 Balance: 975 AGP | Position: 5149 YES, 4856 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_YES 150 AGP (MEDIUM)
+  ✅ Trade executed: 150 AGP on YES
+  💬 Posted reasoning comment
+
+
+=== opus_agg_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:10:35.275Z] 🌊 opus_agg_sent_01 (round 5)...
+  📊 Market: 50.0% Seahawks
+  💰 Balance: 595 AGP | Position: 4997 YES, 5003 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+
+=== opus_agg_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+[2026-02-08T14:11:01.753Z] ⚔️ opus_agg_cont_01 (round 5)...
+  📊 Market: 50.0% Seahawks
+  💰 Balance: 875 AGP | Position: 4997 YES, 5003 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_YES 200 AGP (MEDIUM)
+  ✅ Trade executed: 200 AGP on YES
+  💬 Posted reasoning comment
+
+
+=== opus_con_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-08T14:11:25.539Z] 🔢 opus_con_stat_02 (round 5)...
+  📊 Market: 51.9% Seahawks
+  💰 Balance: 2255 AGP | Position: 4809 YES, 5199 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+
+=== opus_mod_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:11:47.191Z] 📋 opus_mod_news_02 (round 5)...
+  📊 Market: 51.9% Seahawks
+  💰 Balance: 1625 AGP | Position: 4809 YES, 5199 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== opus_agg_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+[2026-02-08T14:12:09.200Z] 💹 opus_agg_stat_02 (round 5)...
+  📊 Market: 51.9% Seahawks
+  💰 Balance: 1125 AGP | Position: 4809 YES, 5199 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+
+=== opus_mod_sent_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+[2026-02-08T14:12:37.455Z] 🔮 opus_mod_sent_02 (round 5)...
+  📊 Market: 51.9% Seahawks
+  💰 Balance: 1825 AGP | Position: 4809 YES, 5199 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+
+=== opus_agg_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[2026-02-08T14:12:59.641Z] 🗡️ opus_agg_cont_02 (round 5)...
+  📊 Market: 51.9% Seahawks
+  💰 Balance: 975 AGP | Position: 4809 YES, 5199 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_YES 150 AGP (MEDIUM)
+  ✅ Trade executed: 150 AGP on YES
+  💬 Posted reasoning comment
+
+
+=== gpt5_con_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:13:24.009Z] 🧮 gpt5_con_stat_01 (round 5)...
+  📊 Market: 53.3% Seahawks
+  💰 Balance: 2050 AGP | Position: 4677 YES, 5346 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== gpt5_con_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+[2026-02-08T14:13:43.654Z] 📰 gpt5_con_news_01 (round 5)...
+  📊 Market: 53.3% Seahawks
+  💰 Balance: 1920 AGP | Position: 4677 YES, 5346 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 100 AGP (MEDIUM)
+  ✅ Trade executed: 100 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_con_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:13:59.842Z] 👥 gpt5_con_sent_01 (round 5)...
+  📊 Market: 52.3% Seahawks
+  💰 Balance: 2125 AGP | Position: 4775 YES, 5236 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== gpt5_con_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+
+[2026-02-08T14:14:21.393Z] 🤔 gpt5_con_cont_01 (round 5)...
+  📊 Market: 52.3% Seahawks
+  💰 Balance: 2375 AGP | Position: 4775 YES, 5236 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 200 AGP (MEDIUM)
+  ✅ Trade executed: 200 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_mod_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:14:41.295Z] 📊 gpt5_mod_stat_01 (round 5)...
+  📊 Market: 50.3% Seahawks
+  💰 Balance: 2025 AGP | Position: 4971 YES, 5030 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== gpt5_mod_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+
+[2026-02-08T14:15:03.208Z] 📈 gpt5_mod_stat_02 (round 5)...
+  📊 Market: 50.3% Seahawks
+  💰 Balance: 2075 AGP | Position: 4971 YES, 5030 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== gpt5_mod_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-08T14:15:21.760Z] 🗞️ gpt5_mod_news_01 (round 5)...
+  📊 Market: 50.3% Seahawks
+  💰 Balance: 1625 AGP | Position: 4971 YES, 5030 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 350 AGP (MEDIUM)
+  ✅ Trade executed: 350 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_mod_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  suppress all logs with { quiet: true }
+
+[2026-02-08T14:15:47.716Z] 📡 gpt5_mod_sent_01 (round 5)...
+  📊 Market: 47.0% Seahawks
+  💰 Balance: 2075 AGP | Position: 5314 YES, 4705 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 400 AGP (MEDIUM)
+  ✅ Trade executed: 400 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_mod_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+
+[2026-02-08T14:16:05.578Z] 🎭 gpt5_mod_cont_01 (round 5)...
+  📊 Market: 43.4% Seahawks
+  💰 Balance: 2075 AGP | Position: 5706 YES, 4382 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 420 AGP (MEDIUM)
+  ✅ Trade executed: 420 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_mod_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-08T14:16:30.112Z] 🃏 gpt5_mod_cont_02 (round 5)...
+  📊 Market: 40.0% Seahawks
+  💰 Balance: 2075 AGP | Position: 6118 YES, 4087 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 400 AGP (MEDIUM)
+  ✅ Trade executed: 400 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_agg_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+
+[2026-02-08T14:16:48.616Z] 🦈 gpt5_agg_stat_01 (round 5)...
+  📊 Market: 37.1% Seahawks
+  💰 Balance: 825 AGP | Position: 6510 YES, 3840 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 400 AGP (MEDIUM)
+  ✅ Trade executed: 400 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_agg_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[2026-02-08T14:17:06.821Z] ⚡ gpt5_agg_news_01 (round 5)...
+  📊 Market: 34.4% Seahawks
+  💰 Balance: 725 AGP | Position: 6902 YES, 3622 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 400 AGP (MEDIUM)
+  ✅ Trade executed: 400 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_agg_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+
+[2026-02-08T14:17:30.463Z] 🚀 gpt5_agg_news_02 (round 5)...
+  📊 Market: 32.0% Seahawks
+  💰 Balance: 875 AGP | Position: 7294 YES, 3428 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 400 AGP (MEDIUM)
+  ✅ Trade executed: 400 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_agg_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+[2026-02-08T14:17:54.531Z] 🌊 gpt5_agg_sent_01 (round 5)...
+  📊 Market: 29.7% Seahawks
+  💰 Balance: 1575 AGP | Position: 7686 YES, 3253 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 750 AGP (HIGH)
+  ✅ Trade executed: 750 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_agg_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:18:14.283Z] ⚔️ gpt5_agg_cont_01 (round 5)...
+  📊 Market: 26.1% Seahawks
+  💰 Balance: 825 AGP | Position: 8421 YES, 2969 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== gpt5_con_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:18:39.952Z] 🔢 gpt5_con_stat_02 (round 5)...
+  📊 Market: 26.1% Seahawks
+  💰 Balance: 2250 AGP | Position: 8421 YES, 2969 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 200 AGP (MEDIUM)
+  ✅ Trade executed: 200 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_mod_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:19:02.316Z] 📋 gpt5_mod_news_02 (round 5)...
+  📊 Market: 25.2% Seahawks
+  💰 Balance: 975 AGP | Position: 8617 YES, 2901 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 200 AGP (MEDIUM)
+  ✅ Trade executed: 200 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_agg_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+
+[2026-02-08T14:19:22.270Z] 💹 gpt5_agg_stat_02 (round 5)...
+  📊 Market: 24.4% Seahawks
+  💰 Balance: 875 AGP | Position: 8813 YES, 2837 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 400 AGP (MEDIUM)
+  ✅ Trade executed: 400 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_mod_sent_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:19:43.578Z] 🔮 gpt5_mod_sent_02 (round 5)...
+  📊 Market: 22.8% Seahawks
+  💰 Balance: 1375 AGP | Position: 9205 YES, 2716 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 300 AGP (MEDIUM)
+  ✅ Trade executed: 300 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gpt5_agg_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:20:02.651Z] 🗡️ gpt5_agg_cont_02 (round 5)...
+  📊 Market: 21.7% Seahawks
+  💰 Balance: 625 AGP | Position: 9499 YES, 2632 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (openai/gpt-5.2)...
+  📋 Decision: BUY_NO 300 AGP (MEDIUM)
+  ✅ Trade executed: 300 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_con_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-08T14:20:26.117Z] 🧮 gemini_con_stat_01 (round 5)...
+  📊 Market: 20.7% Seahawks
+  💰 Balance: 2475 AGP | Position: 9793 YES, 2553 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: BUY_NO 247 AGP (HIGH)
+  ✅ Trade executed: 247 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_con_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+
+[2026-02-08T14:21:01.902Z] 📰 gemini_con_news_01 (round 5)...
+  📊 Market: 19.9% Seahawks
+  💰 Balance: 2185 AGP | Position: 10036 YES, 2491 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  🔧 No <decision> tags — requesting structured decision...
+  📋 Decision: BUY_NO 100 AGP (HIGH)
+  ✅ Trade executed: 100 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_con_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+
+[2026-02-08T14:21:52.866Z] 👥 gemini_con_sent_01 (round 5)...
+  📊 Market: 19.6% Seahawks
+  💰 Balance: 2275 AGP | Position: 10134 YES, 2467 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  🔧 No <decision> tags — requesting structured decision...
+  📋 Decision: BUY_NO 200 AGP (MEDIUM)
+  ✅ Trade executed: 200 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_con_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+
+[2026-02-08T14:22:36.717Z] 🤔 gemini_con_cont_01 (round 5)...
+  📊 Market: 19.0% Seahawks
+  💰 Balance: 2275 AGP | Position: 10330 YES, 2420 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  🔧 No <decision> tags — requesting structured decision...
+  📋 Decision: BUY_YES 100 AGP (LOW)
+  ✅ Trade executed: 100 AGP on YES
+  💬 Posted reasoning comment
+
+
+=== gemini_mod_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+
+[2026-02-08T14:23:22.394Z] 📊 gemini_mod_stat_01 (round 5)...
+  📊 Market: 20.2% Seahawks
+  💰 Balance: 2275 AGP | Position: 9928 YES, 2518 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: BUY_NO 500 AGP (HIGH)
+  ✅ Trade executed: 500 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_mod_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+[2026-02-08T14:23:56.253Z] 📈 gemini_mod_stat_02 (round 5)...
+  📊 Market: 18.7% Seahawks
+  💰 Balance: 2375 AGP | Position: 10418 YES, 2400 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  🔧 No <decision> tags — requesting structured decision...
+  📋 Decision: BUY_NO 250 AGP (HIGH)
+  ✅ Trade executed: 250 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_mod_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+
+[2026-02-08T14:24:45.251Z] 🗞️ gemini_mod_news_01 (round 5)...
+  📊 Market: 18.0% Seahawks
+  💰 Balance: 1625 AGP | Position: 10663 YES, 2345 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: BUY_NO 400 AGP (MEDIUM)
+  ✅ Trade executed: 400 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_mod_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+
+[2026-02-08T14:25:28.336Z] 📡 gemini_mod_sent_01 (round 5)...
+  📊 Market: 17.0% Seahawks
+  💰 Balance: 2560 AGP | Position: 11055 YES, 2261 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: BUY_NO 512 AGP (HIGH)
+  ✅ Trade executed: 512 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_mod_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  suppress all logs with { quiet: true }
+
+[2026-02-08T14:25:59.720Z] 🎭 gemini_mod_cont_01 (round 5)...
+  📊 Market: 15.8% Seahawks
+  💰 Balance: 1825 AGP | Position: 11557 YES, 2163 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  🔧 No <decision> tags — requesting structured decision...
+  📋 Decision: BUY_NO 225 AGP (HIGH)
+  ✅ Trade executed: 225 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_mod_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+[2026-02-08T14:26:45.939Z] 🃏 gemini_mod_cont_02 (round 5)...
+  📊 Market: 15.3% Seahawks
+  💰 Balance: 2350 AGP | Position: 11778 YES, 2123 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  🔧 No <decision> tags — requesting structured decision...
+  📋 Decision: BUY_NO 200 AGP (HIGH)
+  ✅ Trade executed: 200 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_agg_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:27:38.767Z] 🎯 gemini_agg_stat_01 (round 5)...
+  📊 Market: 14.8% Seahawks
+  💰 Balance: 2075 AGP | Position: 11974 YES, 2088 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: BUY_NO 830 AGP (HIGH)
+  ✅ Trade executed: 830 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_agg_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:28:11.438Z] ⚡ gemini_agg_news_01 (round 5)...
+  📊 Market: 13.3% Seahawks
+  💰 Balance: 875 AGP | Position: 12788 YES, 1955 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: BUY_NO 350 AGP (HIGH)
+  ✅ Trade executed: 350 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_agg_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-08T14:28:46.847Z] 🚀 gemini_agg_news_02 (round 5)...
+  📊 Market: 12.7% Seahawks
+  💰 Balance: 825 AGP | Position: 13131 YES, 1904 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: BUY_NO 412 AGP (HIGH)
+  ✅ Trade executed: 412 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_agg_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[2026-02-08T14:29:22.749Z] 🌊 gemini_agg_sent_01 (round 5)...
+  📊 Market: 12.0% Seahawks
+  💰 Balance: 925 AGP | Position: 13535 YES, 1847 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  🔧 No <decision> tags — requesting structured decision...
+  📋 Decision: BUY_NO 450 AGP (HIGH)
+  ✅ Trade executed: 450 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_agg_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-08T14:30:09.486Z] ⚔️ gemini_agg_cont_01 (round 5)...
+  📊 Market: 11.3% Seahawks
+  💰 Balance: 375 AGP | Position: 13976 YES, 1789 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  🔧 No <decision> tags — requesting structured decision...
+  📋 Decision: BUY_NO 375 AGP (HIGH)
+  ✅ Trade executed: 375 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_con_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-08T14:31:07.470Z] 🔢 gemini_con_stat_02 (round 5)...
+  📊 Market: 10.8% Seahawks
+  💰 Balance: 2475 AGP | Position: 14344 YES, 1743 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  🔧 No <decision> tags — requesting structured decision...
+  📋 Decision: BUY_NO 240 AGP (HIGH)
+  ✅ Trade executed: 240 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_mod_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-08T14:31:53.818Z] 📋 gemini_mod_news_02 (round 5)...
+  📊 Market: 10.5% Seahawks
+  💰 Balance: 1625 AGP | Position: 14580 YES, 1715 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  🔧 No <decision> tags — requesting structured decision...
+  📋 Decision: BUY_NO 200 AGP (HIGH)
+  ✅ Trade executed: 200 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_agg_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+
+[2026-02-08T14:32:39.767Z] 💹 gemini_agg_stat_02 (round 5)...
+  📊 Market: 10.3% Seahawks
+  💰 Balance: 2125 AGP | Position: 14776 YES, 1692 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  🔧 No <decision> tags — requesting structured decision...
+  📋 Decision: BUY_NO 1000 AGP (HIGH)
+  ✅ Trade executed: 1000 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_mod_sent_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+
+[2026-02-08T14:33:31.537Z] 🔮 gemini_mod_sent_02 (round 5)...
+  📊 Market: 9.1% Seahawks
+  💰 Balance: 1875 AGP | Position: 15756 YES, 1587 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: BUY_NO 375 AGP (HIGH)
+  ✅ Trade executed: 375 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== gemini_agg_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:34:04.044Z] 🗡️ gemini_agg_cont_02 (round 5)...
+  📊 Market: 8.8% Seahawks
+  💰 Balance: 1075 AGP | Position: 16124 YES, 1551 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: BUY_YES 537 AGP (HIGH)
+  ✅ Trade executed: 537 AGP on YES
+  💬 Posted reasoning comment
+
+
+=== grok_con_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:34:36.803Z] 🧮 grok_con_stat_01 (round 5)...
+  📊 Market: 14.7% Seahawks
+  💰 Balance: 1875 AGP | Position: 12034 YES, 2078 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: BUY_NO 100 AGP (LOW)
+  ✅ Trade executed: 100 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== grok_con_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:34:56.337Z] 📰 grok_con_news_01 (round 5)...
+  📊 Market: 14.5% Seahawks
+  💰 Balance: 1675 AGP | Position: 12132 YES, 2061 NO
+  🔍 Searching (5 queries)...
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: BUY_NO 85 AGP (LOW)
+  ✅ Trade executed: 85 AGP on NO
+  💬 Posted reasoning comment
+
+
+=== grok_con_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+
+[2026-02-08T14:35:17.171Z] 👥 grok_con_sent_01 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 2175 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (HIGH)
+
+
+=== grok_con_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  enable debug logging with { debug: true }
+
+[2026-02-08T14:35:30.492Z] 🤔 grok_con_cont_01 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 1850 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (HIGH)
+
+
+=== grok_mod_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  enable debug logging with { debug: true }
+
+[2026-02-08T14:35:36.737Z] 📊 grok_mod_stat_01 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 1620 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (HIGH)
+
+
+=== grok_mod_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+
+[2026-02-08T14:35:44.204Z] 📈 grok_mod_stat_02 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 1475 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (HIGH)
+
+
+=== grok_mod_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+[2026-02-08T14:35:50.124Z] 🗞️ grok_mod_news_01 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 2075 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== grok_mod_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  suppress all logs with { quiet: true }
+
+[2026-02-08T14:35:55.586Z] 📡 grok_mod_sent_01 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 660 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== grok_mod_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+
+[2026-02-08T14:36:01.977Z] 🎭 grok_mod_cont_01 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 675 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (LOW)
+
+
+=== grok_mod_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[2026-02-08T14:36:10.629Z] 🃏 grok_mod_cont_02 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 640 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (LOW)
+
+
+=== grok_agg_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+
+[2026-02-08T14:36:16.502Z] 🎯 grok_agg_stat_01 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 445 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (HIGH)
+
+
+=== grok_agg_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:36:23.365Z] ⚡ grok_agg_news_01 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 13 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (LOW)
+
+
+=== grok_agg_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+
+[2026-02-08T14:36:28.562Z] 🚀 grok_agg_news_02 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 1000 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (HIGH)
+
+
+=== grok_agg_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:36:35.770Z] 🌊 grok_agg_sent_01 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 175 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (HIGH)
+
+
+=== grok_agg_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-08T14:36:41.247Z] ⚔️ grok_agg_cont_01 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 1000 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (HIGH)
+
+
+=== grok_con_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+[2026-02-08T14:36:46.513Z] 🔢 grok_con_stat_02 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 1575 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (HIGH)
+
+
+=== grok_mod_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[2026-02-08T14:36:51.997Z] 📋 grok_mod_news_02 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 540 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== grok_agg_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[2026-02-08T14:36:57.971Z] 💹 grok_agg_stat_02 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 395 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (HIGH)
+
+
+=== grok_mod_sent_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+
+[2026-02-08T14:37:05.221Z] 🔮 grok_mod_sent_02 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 500 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+
+=== grok_agg_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[2026-02-08T14:37:25.422Z] 🗡️ grok_agg_cont_02 (round 5)...
+  📊 Market: 14.3% Seahawks
+  💰 Balance: 38 AGP | Position: 12216 YES, 2047 NO
+  🔍 Searching (5 queries)...
+Search failed for "Super Bowl LX Seahawks Patriots breaking news last 6 hours": 429
+Search failed for "Super Bowl LX injury report update today February 8 2026": 429
+Search failed for "Super Bowl LX weather forecast Levi's Stadium gameday": 429
+Search failed for "Super Bowl LX inactive list scratches lineup changes": 429
+Search failed for "Super Bowl LX pregame warmup Drake Maye Geno Smith status": 429
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (HIGH)
+
+
+🏁 ROUND 5 COMPLETE — 2026-02-08T14:37:31.098Z
+Trades: 45 | Holds: 35 | Errors: 0

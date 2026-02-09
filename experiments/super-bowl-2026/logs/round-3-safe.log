@@ -1,0 +1,86 @@
+🏈 ROUND 3 — Sat Feb  7 20:41:30 UTC 2026
+Running agents one at a time (safe mode)...
+[1/80] opus_con_stat_01 ...   📋 Decision: BUY_NO 100 AGP (LOW) |   ✅ Trade executed: 100 AGP on NO
+[2/80] opus_con_news_01 ... 📋 HOLD
+[3/80] opus_con_sent_01 ... 📋 HOLD
+[4/80] opus_con_cont_01 ... 📋 HOLD
+[5/80] opus_mod_stat_01 ... 📋 HOLD
+[6/80] opus_mod_stat_02 ... 📋 HOLD
+[7/80] opus_mod_news_01 ... 📋 HOLD
+[8/80] opus_mod_sent_01 ... 📋 HOLD
+[9/80] opus_mod_cont_01 ...   📋 Decision: BUY_NO 275 AGP (MEDIUM) |   ✅ Trade executed: 275 AGP on NO
+[10/80] opus_mod_cont_02 ...   📋 Decision: BUY_NO 200 AGP (MEDIUM) |   ✅ Trade executed: 200 AGP on NO
+[11/80] opus_agg_stat_01 ... 📋 HOLD
+[12/80] opus_agg_news_01 ... 📋 HOLD
+[13/80] opus_agg_news_02 ...   📋 Decision: BUY_NO 400 AGP (LOW) |   ✅ Trade executed: 400 AGP on NO
+[14/80] opus_agg_sent_01 ...   📋 Decision: BUY_NO 150 AGP (LOW) |   ✅ Trade executed: 150 AGP on NO
+[15/80] opus_agg_cont_01 ...   📋 Decision: BUY_YES 200 AGP (MEDIUM) |   ✅ Trade executed: 200 AGP on YES
+[16/80] opus_con_stat_02 ... 📋 HOLD
+[17/80] opus_mod_news_02 ... 📋 HOLD
+[18/80] opus_agg_stat_02 ...   📋 Decision: BUY_NO 150 AGP (LOW) |   ✅ Trade executed: 150 AGP on NO
+[19/80] opus_mod_sent_02 ... 📋 HOLD
+[20/80] opus_agg_cont_02 ...   📋 Decision: BUY_NO 200 AGP (LOW) |   ✅ Trade executed: 200 AGP on NO
+[21/80] gpt5_con_stat_01 ... 📋 HOLD
+[22/80] gpt5_con_news_01 ... 📋 HOLD
+[23/80] gpt5_con_sent_01 ... 📋 HOLD
+[24/80] gpt5_con_cont_01 ... 📋 HOLD
+[25/80] gpt5_mod_stat_01 ... 📋 HOLD
+[26/80] gpt5_mod_stat_02 ... 📋 HOLD
+[27/80] gpt5_mod_news_01 ... 📋 HOLD
+[28/80] gpt5_mod_sent_01 ... 📋 HOLD
+[29/80] gpt5_mod_cont_01 ... 📋 HOLD
+[30/80] gpt5_mod_cont_02 ... 📋 HOLD
+[31/80] gpt5_agg_stat_01 ... 📋 HOLD
+[32/80] gpt5_agg_news_01 ... 📋 HOLD
+[33/80] gpt5_agg_news_02 ... 📋 HOLD
+[34/80] gpt5_agg_sent_01 ... 📋 HOLD
+[35/80] gpt5_agg_cont_01 ... 📋 HOLD
+[36/80] gpt5_con_stat_02 ... 📋 HOLD
+[37/80] gpt5_mod_news_02 ... 📋 HOLD
+[38/80] gpt5_agg_stat_02 ... 📋 HOLD
+[39/80] gpt5_mod_sent_02 ... 📋 HOLD
+[40/80] gpt5_agg_cont_02 ...   📋 Decision: BUY_YES 600 AGP (MEDIUM) |   ✅ Trade executed: 600 AGP on YES
+[41/80] gemini_con_stat_01 ... 📋 HOLD
+[42/80] gemini_con_news_01 ... 📋 HOLD
+[43/80] gemini_con_sent_01 ... 📋 HOLD
+[44/80] gemini_con_cont_01 ... 📋 HOLD
+[45/80] gemini_mod_stat_01 ... 📋 HOLD
+[46/80] gemini_mod_stat_02 ... 📋 HOLD
+[47/80] gemini_mod_news_01 ... 📋 HOLD
+[48/80] gemini_mod_sent_01 ... 📋 HOLD
+[49/80] gemini_mod_cont_01 ... 📋 HOLD
+[50/80] gemini_mod_cont_02 ... 📋 HOLD
+[51/80] gemini_agg_stat_01 ... 📋 HOLD
+[52/80] gemini_agg_news_01 ... 📋 HOLD
+[53/80] gemini_agg_news_02 ... 📋 HOLD
+[54/80] gemini_agg_sent_01 ... 📋 HOLD
+[55/80] gemini_agg_cont_01 ... 📋 HOLD
+[56/80] gemini_con_stat_02 ... 📋 HOLD
+[57/80] gemini_mod_news_02 ... 📋 HOLD
+[58/80] gemini_agg_stat_02 ... 📋 HOLD
+[59/80] gemini_mod_sent_02 ... 📋 HOLD
+[60/80] gemini_agg_cont_02 ... 📋 HOLD
+[61/80] grok_con_stat_01 ... 📋 HOLD
+[62/80] grok_con_news_01 ... 📋 HOLD
+[63/80] grok_con_sent_01 ... 📋 HOLD
+[64/80] grok_con_cont_01 ...   📋 Decision: BUY_NO 110 AGP (LOW) |   ✅ Trade executed: 110 AGP on NO
+[65/80] grok_mod_stat_01 ... 📋 HOLD
+[66/80] grok_mod_stat_02 ... 📋 HOLD
+[67/80] grok_mod_news_01 ... 📋 HOLD
+[68/80] grok_mod_sent_01 ... 📋 HOLD
+[69/80] grok_mod_cont_01 ... 📋 HOLD
+[70/80] grok_mod_cont_02 ...   📋 Decision: BUY_NO 325 AGP (MEDIUM) |   ✅ Trade executed: 325 AGP on NO
+[71/80] grok_agg_stat_01 ... 📋 HOLD
+[72/80] grok_agg_news_01 ... 📋 HOLD
+[73/80] grok_agg_news_02 ... 📋 HOLD
+[74/80] grok_agg_sent_01 ... 📋 HOLD
+[75/80] grok_agg_cont_01 ...   📋 Decision: BUY_NO 300 AGP (HIGH) |   ✅ Trade executed: 300 AGP on NO
+[76/80] grok_con_stat_02 ... 📋 HOLD
+[77/80] grok_mod_news_02 ... 📋 HOLD
+[78/80] grok_agg_stat_02 ... 📋 HOLD
+[79/80] grok_mod_sent_02 ... 📋 HOLD
+[80/80] grok_agg_cont_02 ...   📋 Decision: BUY_YES 300 AGP (HIGH) |   ✅ Trade executed: 300 AGP on YES
+
+✅ ROUND 3 COMPLETE — Sat Feb  7 21:06:13 UTC 2026
+  Trades: 13 | Holds: 67 | Errors: 0
+📊 Final: 50.2% Seahawks | Volume: 65580 AGP

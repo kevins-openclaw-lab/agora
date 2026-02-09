@@ -1,0 +1,18 @@
+🏈 ROUND 6 — Sun Feb  8 01:52:52 UTC 2026
+Running agents one at a time (safe mode)...
+[1/80] opus_con_stat_01 ... 🔄 RESUMING ROUND 6 from agent #70 — Sun Feb  8 01:53:27 UTC 2026
+[70/80] grok_mod_cont_02 ...   📋 Decision: BUY_NO 160 AGP (MEDIUM) |   ✅ Trade executed: 160 AGP on NO
+[71/80] grok_agg_stat_01 ...   📋 Decision: BUY_YES 350 AGP (HIGH) |   ✅ Trade executed: 350 AGP on YES
+[72/80] grok_agg_news_01 ...   📋 Decision: BUY_NO 12 AGP (HIGH) |   ✅ Trade executed: 12 AGP on NO
+[73/80] grok_agg_news_02 ... ⚠️ Unknown
+[74/80] grok_agg_sent_01 ...   📋 Decision: BUY_NO 150 AGP (HIGH) |   ✅ Trade executed: 150 AGP on NO
+[75/80] grok_agg_cont_01 ... ⚠️ Unknown
+[76/80] grok_con_stat_02 ... 📋 HOLD
+[77/80] grok_mod_news_02 ...   📋 Decision: BUY_NO 120 AGP (MEDIUM) |   ✅ Trade executed: 120 AGP on NO
+[78/80] grok_agg_stat_02 ...   📋 Decision: BUY_YES 400 AGP (HIGH) |   ✅ Trade executed: 400 AGP on YES
+[79/80] grok_mod_sent_02 ...   📋 Decision: BUY_NO 125 AGP (MEDIUM) |   ✅ Trade executed: 125 AGP on NO
+[80/80] grok_agg_cont_02 ...   📋 Decision: BUY_NO 37 AGP (HIGH) |   ✅ Trade executed: 37 AGP on NO
+
+✅ ROUND 6 RESUME COMPLETE — Sun Feb  8 01:58:37 UTC 2026
+  Trades: 8 | Holds: 1 | Errors: 2
+📊 Final: 58.8% Seahawks | Volume: 83469 AGP

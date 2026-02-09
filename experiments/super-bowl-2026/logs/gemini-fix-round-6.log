@@ -1,0 +1,25 @@
+🔧 GEMINI FIX ROUND — Sun Feb  8 02:09:17 UTC 2026
+[1/20] gemini_con_stat_01 ...   📋 Decision: BUY_NO 100 AGP (MEDIUM) |   ✅ Trade executed: 100 AGP on NO
+[2/20] gemini_con_news_01 ...   📋 Decision: BUY_YES 240 AGP (HIGH) |   ✅ Trade executed: 240 AGP on YES
+[3/20] gemini_con_sent_01 ...   📋 Decision: BUY_YES 100 AGP (HIGH) |   ✅ Trade executed: 100 AGP on YES
+[4/20] gemini_con_cont_01 ...   📋 Decision: BUY_NO 100 AGP (MEDIUM) |   ✅ Trade executed: 100 AGP on NO
+[5/20] gemini_mod_stat_01 ...   📋 Decision: BUY_YES 250 AGP (HIGH) |   ✅ Trade executed: 250 AGP on YES
+[6/20] gemini_mod_stat_02 ...   📋 Decision: BUY_YES 200 AGP (HIGH) |   ✅ Trade executed: 200 AGP on YES
+[7/20] gemini_mod_news_01 ...   📋 Decision: BUY_YES 450 AGP (HIGH) |   ✅ Trade executed: 450 AGP on YES
+[8/20] gemini_mod_sent_01 ...   📋 Decision: BUY_NO 15 AGP (MEDIUM) |   ✅ Trade executed: 15 AGP on NO
+[9/20] gemini_mod_cont_01 ...   📋 Decision: BUY_NO 250 AGP (HIGH) |   ✅ Trade executed: 250 AGP on NO
+[10/20] gemini_mod_cont_02 ...   📋 Decision: BUY_NO 225 AGP (MEDIUM) |   ✅ Trade executed: 225 AGP on NO
+[11/20] gemini_agg_stat_01 ...   📋 Decision: BUY_YES 500 AGP (HIGH) |   ✅ Trade executed: 500 AGP on YES
+[12/20] gemini_agg_news_01 ...   📋 Decision: BUY_NO 450 AGP (HIGH) |   ✅ Trade executed: 450 AGP on NO
+[13/20] gemini_agg_news_02 ...   📋 Decision: BUY_NO 500 AGP (HIGH) |   ✅ Trade executed: 500 AGP on NO
+[14/20] gemini_agg_sent_01 ...   📋 Decision: BUY_NO 450 AGP (HIGH) |   ✅ Trade executed: 450 AGP on NO
+[15/20] gemini_agg_cont_01 ...   📋 Decision: BUY_NO 450 AGP (HIGH) |   ✅ Trade executed: 450 AGP on NO
+[16/20] gemini_con_stat_02 ...   📋 Decision: BUY_YES 100 AGP (HIGH) |   ✅ Trade executed: 100 AGP on YES
+[17/20] gemini_mod_news_02 ...   📋 Decision: BUY_NO 450 AGP (MEDIUM) |   ✅ Trade executed: 450 AGP on NO
+[18/20] gemini_agg_stat_02 ...   📋 Decision: BUY_NO 450 AGP (HIGH) |   ✅ Trade executed: 450 AGP on NO
+[19/20] gemini_mod_sent_02 ...   📋 Decision: BUY_NO 200 AGP (MEDIUM) |   ✅ Trade executed: 200 AGP on NO
+[20/20] gemini_agg_cont_02 ...   📋 Decision: BUY_YES 500 AGP (HIGH) |   ✅ Trade executed: 500 AGP on YES
+
+✅ GEMINI FIX COMPLETE — Sun Feb  8 02:25:51 UTC 2026
+  Trades: 20 | Holds: 0 | Errors: 0
+📊 Final: 40.8% Seahawks | Volume: 89949 AGP

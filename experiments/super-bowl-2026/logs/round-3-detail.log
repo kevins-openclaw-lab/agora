@@ -1,0 +1,827 @@
+=== opus_con_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+
+[2026-02-07T20:41:30.777Z] 🧮 opus_con_stat_01 (round 3)...
+  📊 Market: 62.7% Seahawks
+  💰 Balance: 1745 AGP | Position: 3855 YES, 6485 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_NO 100 AGP (LOW)
+  ✅ Trade executed: 100 AGP on NO
+  💬 Posted reasoning comment
+
+=== opus_con_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  enable debug logging with { debug: true }
+
+[2026-02-07T20:41:50.880Z] 📰 opus_con_news_01 (round 3)...
+  📊 Market: 61.5% Seahawks
+  💰 Balance: 2275 AGP | Position: 3953 YES, 6324 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+=== opus_con_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-07T20:42:05.718Z] 👥 opus_con_sent_01 (round 3)...
+  📊 Market: 61.5% Seahawks
+  💰 Balance: 2225 AGP | Position: 3953 YES, 6324 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+=== opus_con_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[2026-02-07T20:42:23.720Z] 🤔 opus_con_cont_01 (round 3)...
+  📊 Market: 61.5% Seahawks
+  💰 Balance: 2275 AGP | Position: 3953 YES, 6324 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+=== opus_mod_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-07T20:42:39.810Z] 📊 opus_mod_stat_01 (round 3)...
+  📊 Market: 61.5% Seahawks
+  💰 Balance: 2150 AGP | Position: 3953 YES, 6324 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+=== opus_mod_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[2026-02-07T20:42:57.802Z] 📈 opus_mod_stat_02 (round 3)...
+  📊 Market: 61.5% Seahawks
+  💰 Balance: 2425 AGP | Position: 3953 YES, 6324 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+=== opus_mod_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  enable debug logging with { debug: true }
+
+[2026-02-07T20:43:14.645Z] 🗞️ opus_mod_news_01 (round 3)...
+  📊 Market: 61.5% Seahawks
+  💰 Balance: 1875 AGP | Position: 3953 YES, 6324 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+=== opus_mod_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+
+[2026-02-07T20:43:30.554Z] 📡 opus_mod_sent_01 (round 3)...
+  📊 Market: 61.5% Seahawks
+  💰 Balance: 1660 AGP | Position: 3953 YES, 6324 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+=== opus_mod_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  suppress all logs with { quiet: true }
+
+[2026-02-07T20:43:48.401Z] 🎭 opus_mod_cont_01 (round 3)...
+  📊 Market: 61.5% Seahawks
+  💰 Balance: 1725 AGP | Position: 3953 YES, 6324 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_NO 275 AGP (MEDIUM)
+  ✅ Trade executed: 275 AGP on NO
+  💬 Posted reasoning comment
+
+=== opus_mod_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+
+[2026-02-07T20:44:05.679Z] 🃏 opus_mod_cont_02 (round 3)...
+  📊 Market: 58.4% Seahawks
+  💰 Balance: 1875 AGP | Position: 4223 YES, 5920 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_NO 200 AGP (MEDIUM)
+  ✅ Trade executed: 200 AGP on NO
+  💬 Posted reasoning comment
+
+=== opus_agg_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-07T20:44:23.099Z] 🎯 opus_agg_stat_01 (round 3)...
+  📊 Market: 56.1% Seahawks
+  💰 Balance: 1200 AGP | Position: 4419 YES, 5657 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+=== opus_agg_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+
+[2026-02-07T20:44:45.813Z] ⚡ opus_agg_news_01 (round 3)...
+  📊 Market: 56.1% Seahawks
+  💰 Balance: 975 AGP | Position: 4419 YES, 5657 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+=== opus_agg_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+
+[2026-02-07T20:45:04.202Z] 🚀 opus_agg_news_02 (round 3)...
+  📊 Market: 56.1% Seahawks
+  💰 Balance: 1375 AGP | Position: 4419 YES, 5657 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_NO 400 AGP (LOW)
+  ✅ Trade executed: 400 AGP on NO
+  💬 Posted reasoning comment
+
+=== opus_agg_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+
+[2026-02-07T20:45:25.058Z] 🌊 opus_agg_sent_01 (round 3)...
+  📊 Market: 51.9% Seahawks
+  💰 Balance: 745 AGP | Position: 4811 YES, 5196 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_NO 150 AGP (LOW)
+  ✅ Trade executed: 150 AGP on NO
+  💬 Posted reasoning comment
+
+=== opus_agg_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[2026-02-07T20:45:56.523Z] ⚔️ opus_agg_cont_01 (round 3)...
+  📊 Market: 50.4% Seahawks
+  💰 Balance: 1075 AGP | Position: 4958 YES, 5042 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_YES 200 AGP (MEDIUM)
+  ✅ Trade executed: 200 AGP on YES
+  💬 Posted reasoning comment
+
+=== opus_con_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-07T20:46:19.743Z] 🔢 opus_con_stat_02 (round 3)...
+  📊 Market: 52.3% Seahawks
+  💰 Balance: 2255 AGP | Position: 4772 YES, 5238 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+=== opus_mod_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-07T20:46:34.385Z] 📋 opus_mod_news_02 (round 3)...
+  📊 Market: 52.3% Seahawks
+  💰 Balance: 1625 AGP | Position: 4772 YES, 5238 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+=== opus_agg_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+
+[2026-02-07T20:46:51.692Z] 💹 opus_agg_stat_02 (round 3)...
+  📊 Market: 52.3% Seahawks
+  💰 Balance: 1275 AGP | Position: 4772 YES, 5238 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_NO 150 AGP (LOW)
+  ✅ Trade executed: 150 AGP on NO
+  💬 Posted reasoning comment
+
+=== opus_mod_sent_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+
+[2026-02-07T20:47:14.585Z] 🔮 opus_mod_sent_02 (round 3)...
+  📊 Market: 50.8% Seahawks
+  💰 Balance: 1825 AGP | Position: 4919 YES, 5082 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: HOLD  (LOW)
+
+=== opus_agg_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  suppress all logs with { quiet: true }
+
+[2026-02-07T20:47:32.089Z] 🗡️ opus_agg_cont_02 (round 3)...
+  📊 Market: 50.8% Seahawks
+  💰 Balance: 1175 AGP | Position: 4919 YES, 5082 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (anthropic/claude-opus-4.6)...
+  📋 Decision: BUY_NO 200 AGP (LOW)
+  ✅ Trade executed: 200 AGP on NO
+  💬 Posted reasoning comment
+
+=== gpt5_con_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+
+[2026-02-07T20:48:02.712Z] 🧮 gpt5_con_stat_01 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 2450 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_con_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+[2026-02-07T20:48:28.678Z] 📰 gpt5_con_news_01 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 2220 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_con_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+
+[2026-02-07T20:48:58.505Z] 👥 gpt5_con_sent_01 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 2425 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_con_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  enable debug logging with { debug: true }
+
+[2026-02-07T20:49:24.884Z] 🤔 gpt5_con_cont_01 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 2375 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_mod_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[2026-02-07T20:49:56.538Z] 📊 gpt5_mod_stat_01 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 2025 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_mod_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[2026-02-07T20:50:22.001Z] 📈 gpt5_mod_stat_02 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 2075 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_mod_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  enable debug logging with { debug: true }
+
+[2026-02-07T20:50:46.404Z] 🗞️ gpt5_mod_news_01 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 1625 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_mod_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+
+[2026-02-07T20:51:11.652Z] 📡 gpt5_mod_sent_01 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 2075 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_mod_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[2026-02-07T20:51:40.404Z] 🎭 gpt5_mod_cont_01 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 2075 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_mod_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+
+[2026-02-07T20:52:11.360Z] 🃏 gpt5_mod_cont_02 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 2075 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_agg_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-07T20:52:45.357Z] 🦈 gpt5_agg_stat_01 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 825 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_agg_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-07T20:53:22.652Z] ⚡ gpt5_agg_news_01 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 725 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_agg_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+
+[2026-02-07T20:53:45.873Z] 🚀 gpt5_agg_news_02 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 875 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_agg_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[2026-02-07T20:54:16.874Z] 🌊 gpt5_agg_sent_01 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 1575 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gpt5_agg_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[2026-02-07T20:54:48.811Z] ⚔️ gpt5_agg_cont_01 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 825 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_con_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-07T20:55:27.339Z] 🔢 gpt5_con_stat_02 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 2250 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_mod_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-07T20:55:54.090Z] 📋 gpt5_mod_news_02 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 2500 AGP | Position: 0 YES, 0 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gpt5_agg_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+[2026-02-07T20:56:22.464Z] 💹 gpt5_agg_stat_02 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 1575 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (LOW)
+
+=== gpt5_mod_sent_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[2026-02-07T20:56:57.931Z] 🔮 gpt5_mod_sent_02 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 2075 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gpt5_agg_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-07T20:57:27.825Z] 🗡️ gpt5_agg_cont_02 (round 3)...
+  📊 Market: 48.9% Seahawks
+  💰 Balance: 1475 AGP | Position: 5115 YES, 4887 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (openai/gpt-5.2-pro)...
+  📋 Decision: BUY_YES 600 AGP (MEDIUM)
+  ✅ Trade executed: 600 AGP on YES
+  💬 Posted reasoning comment
+
+=== gemini_con_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+
+[2026-02-07T20:58:11.968Z] 🧮 gemini_con_stat_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2500 AGP | Position: 0 YES, 0 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_con_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[2026-02-07T20:58:23.946Z] 📰 gemini_con_news_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2425 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_con_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+
+[2026-02-07T20:58:35.647Z] 👥 gemini_con_sent_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2375 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_con_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+
+[2026-02-07T20:58:47.026Z] 🤔 gemini_con_cont_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2375 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_mod_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+
+[2026-02-07T20:58:59.399Z] 📊 gemini_mod_stat_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2500 AGP | Position: 0 YES, 0 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_mod_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+
+[2026-02-07T20:59:11.590Z] 📈 gemini_mod_stat_02 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2500 AGP | Position: 0 YES, 0 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_mod_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-07T20:59:23.185Z] 🗞️ gemini_mod_news_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2075 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_mod_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-07T20:59:36.139Z] 📡 gemini_mod_sent_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2500 AGP | Position: 0 YES, 0 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_mod_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-07T20:59:48.176Z] 🎭 gemini_mod_cont_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2075 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_mod_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  suppress all logs with { quiet: true }
+
+[2026-02-07T21:00:09.658Z] 🃏 gemini_mod_cont_02 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2500 AGP | Position: 0 YES, 0 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_agg_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-07T21:00:22.106Z] 🎯 gemini_agg_stat_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2500 AGP | Position: 0 YES, 0 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_agg_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+
+[2026-02-07T21:00:33.802Z] ⚡ gemini_agg_news_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 1325 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_agg_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[2026-02-07T21:00:44.505Z] 🚀 gemini_agg_news_02 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 1325 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_agg_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  enable debug logging with { debug: true }
+
+[2026-02-07T21:01:03.369Z] 🌊 gemini_agg_sent_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 1375 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_agg_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+
+[2026-02-07T21:01:16.191Z] ⚔️ gemini_agg_cont_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 1325 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_con_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  suppress all logs with { quiet: true }
+
+[2026-02-07T21:01:29.230Z] 🔢 gemini_con_stat_02 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2500 AGP | Position: 0 YES, 0 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_mod_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+
+[2026-02-07T21:01:42.521Z] 📋 gemini_mod_news_02 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2075 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_agg_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+
+[2026-02-07T21:01:54.537Z] 💹 gemini_agg_stat_02 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2500 AGP | Position: 0 YES, 0 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_mod_sent_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+[2026-02-07T21:02:08.525Z] 🔮 gemini_mod_sent_02 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2075 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== gemini_agg_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  suppress all logs with { quiet: true }
+
+[2026-02-07T21:02:20.978Z] 🗡️ gemini_agg_cont_02 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 1575 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (google/gemini-2.5-pro)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== grok_con_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+
+[2026-02-07T21:02:33.684Z] 🧮 grok_con_stat_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2375 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (HIGH)
+
+=== grok_con_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+
+[2026-02-07T21:02:43.706Z] 📰 grok_con_news_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2175 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== grok_con_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+
+[2026-02-07T21:02:54.723Z] 👥 grok_con_sent_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2175 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== grok_con_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+
+[2026-02-07T21:03:04.420Z] 🤔 grok_con_cont_01 (round 3)...
+  📊 Market: 54.5% Seahawks
+  💰 Balance: 2175 AGP | Position: 4566 YES, 5475 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: BUY_NO 110 AGP (LOW)
+  ✅ Trade executed: 110 AGP on NO
+  💬 Posted reasoning comment
+
+=== grok_mod_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  suppress all logs with { quiet: true }
+
+[2026-02-07T21:03:15.121Z] 📊 grok_mod_stat_01 (round 3)...
+  📊 Market: 53.4% Seahawks
+  💰 Balance: 1620 AGP | Position: 4674 YES, 5349 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== grok_mod_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+
+[2026-02-07T21:03:26.721Z] 📈 grok_mod_stat_02 (round 3)...
+  📊 Market: 53.4% Seahawks
+  💰 Balance: 2075 AGP | Position: 4674 YES, 5349 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== grok_mod_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+[2026-02-07T21:03:37.423Z] 🗞️ grok_mod_news_01 (round 3)...
+  📊 Market: 53.4% Seahawks
+  💰 Balance: 2075 AGP | Position: 4674 YES, 5349 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== grok_mod_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-07T21:03:47.777Z] 📡 grok_mod_sent_01 (round 3)...
+  📊 Market: 53.4% Seahawks
+  💰 Balance: 1660 AGP | Position: 4674 YES, 5349 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== grok_mod_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[2026-02-07T21:03:59.090Z] 🎭 grok_mod_cont_01 (round 3)...
+  📊 Market: 53.4% Seahawks
+  💰 Balance: 1625 AGP | Position: 4674 YES, 5349 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  ❌ Model call failed for grok_mod_cont_01: OpenRouter API error (500): {"error":{"message":"Internal Server Error","code":500}}
+  📋 Decision: HOLD  (LOW)
+
+=== grok_mod_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+
+[2026-02-07T21:04:02.453Z] 🃏 grok_mod_cont_02 (round 3)...
+  📊 Market: 53.4% Seahawks
+  💰 Balance: 1625 AGP | Position: 4674 YES, 5349 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: BUY_NO 325 AGP (MEDIUM)
+  ✅ Trade executed: 325 AGP on NO
+  💬 Posted reasoning comment
+
+=== grok_agg_stat_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+[2026-02-07T21:04:18.272Z] 🎯 grok_agg_stat_01 (round 3)...
+  📊 Market: 50.1% Seahawks
+  💰 Balance: 795 AGP | Position: 4993 YES, 5007 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (LOW)
+
+=== grok_agg_news_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[2026-02-07T21:04:29.385Z] ⚡ grok_agg_news_01 (round 3)...
+  📊 Market: 50.1% Seahawks
+  💰 Balance: 825 AGP | Position: 4993 YES, 5007 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== grok_agg_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+
+[2026-02-07T21:04:39.639Z] 🚀 grok_agg_news_02 (round 3)...
+  📊 Market: 50.1% Seahawks
+  💰 Balance: 725 AGP | Position: 4993 YES, 5007 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== grok_agg_sent_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  enable debug logging with { debug: true }
+
+[2026-02-07T21:04:49.838Z] 🌊 grok_agg_sent_01 (round 3)...
+  📊 Market: 50.1% Seahawks
+  💰 Balance: 725 AGP | Position: 4993 YES, 5007 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== grok_agg_cont_01 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+
+[2026-02-07T21:05:02.140Z] ⚔️ grok_agg_cont_01 (round 3)...
+  📊 Market: 50.1% Seahawks
+  💰 Balance: 725 AGP | Position: 4993 YES, 5007 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: BUY_NO 300 AGP (HIGH)
+  ✅ Trade executed: 300 AGP on NO
+  💬 Posted reasoning comment
+
+=== grok_con_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+
+[2026-02-07T21:05:15.887Z] 🔢 grok_con_stat_02 (round 3)...
+  📊 Market: 47.2% Seahawks
+  💰 Balance: 2375 AGP | Position: 5287 YES, 4729 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (HIGH)
+
+=== grok_mod_news_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+[2026-02-07T21:05:25.792Z] 📋 grok_mod_news_02 (round 3)...
+  📊 Market: 47.2% Seahawks
+  💰 Balance: 1660 AGP | Position: 5287 YES, 4729 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== grok_agg_stat_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+
+[2026-02-07T21:05:36.853Z] 💹 grok_agg_stat_02 (round 3)...
+  📊 Market: 47.2% Seahawks
+  💰 Balance: 795 AGP | Position: 5287 YES, 4729 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== grok_mod_sent_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: ⚙️  override existing env vars with { override: true }
+
+[2026-02-07T21:05:45.760Z] 🔮 grok_mod_sent_02 (round 3)...
+  📊 Market: 47.2% Seahawks
+  💰 Balance: 1625 AGP | Position: 5287 YES, 4729 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: HOLD  (MEDIUM)
+
+=== grok_agg_cont_02 ===
+[dotenv@17.2.4] injecting env (7) from ../.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[2026-02-07T21:05:54.827Z] 🗡️ grok_agg_cont_02 (round 3)...
+  📊 Market: 47.2% Seahawks
+  💰 Balance: 675 AGP | Position: 5287 YES, 4729 NO
+  🙈 Search DISABLED for Blind Round
+  🤔 Thinking (x-ai/grok-4.1-fast)...
+  📋 Decision: BUY_YES 300 AGP (HIGH)
+  ✅ Trade executed: 300 AGP on YES
+  💬 Posted reasoning comment
+
