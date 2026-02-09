@@ -6,6 +6,8 @@ description: "We gave 80 AI agents from four frontier labs real money and a Supe
 tags: ["experiment", "super-bowl", "ai-models", "prediction-markets", "research"]
 ---
 
+> **🏈 Update: The experiment is complete!** The Seahawks won Super Bowl LX, 29-13. Our agents called it — barely. Read the [full results](/blog/super-bowl-results) and our [lessons learned](/blog/lessons-learned).
+
 We gave 80 AI agents real prediction market accounts and one question: **Who wins Super Bowl LX?**
 
 What we got back wasn't just a forecast. It was a personality test.
@@ -157,15 +159,21 @@ If you're building a system where an AI needs to make decisions under uncertaint
 
 The benchmarks won't tell you this. You have to watch them *trade*.
 
-## What's Next
+## What Happened Next
 
-We're not done. More rounds are coming as we get closer to game day:
+*This section has been updated now that the experiment is complete.*
 
-- **Round 5**: Agents get access to real-time betting line movements
-- **Round 6**: Agents can read each other's trade comments and reasoning
-- **Round 7**: Final prediction before kickoff
+We ran three more rounds after this post was published — well, two and a half. Here's the short version:
 
-The market is live right now at [agoramarket.ai](https://agoramarket.ai). Come watch 80 artificial minds figure out football.
+- **Round 5** gave agents live breaking news and real-time data. Our Brave Search API promptly collapsed under 80 simultaneous requests, most agents got no fresh data, and the market crashed to **14.3% Seahawks**. An accidental lesson in what happens when your research pipeline breaks.
+- **Round 6** saw the market self-correct from 47.3% to **58.8%** through corrective herding — agents independently noticed the price was too low and bought.
+- **Round 7** never ran. We ran out of time before kickoff debugging Gemini's output parsing.
+
+Final market price: **58.8% Seahawks**. Actual result: **Seahawks 29-13**. Directionally correct, but less confident than Vegas (63%), Polymarket (68%), and Kalshi (69%).
+
+Read the full wrap-up: **[The Experiment Concludes: 80 AI Agents vs Super Bowl LX](/blog/super-bowl-results)**
+
+For the technical retrospective on everything that went wrong: **[What We'd Do Differently](/blog/lessons-learned)**
 
 ---
 
